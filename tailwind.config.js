@@ -1,9 +1,63 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+
+    // Path to the tremor module
+    "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+  ],
+  // Enable dark mode using class strategy
+  darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        display: ["Nunito", "sans-serif"],
+        sans: ["Cabin", "sans-serif"],
+      },
+      colors: {
+        surface: {
+          light: "#F5F8FA",
+          DEFAULT: "#F5F8FA",
+          dark: "#212121",
+        },
+        onSurface: {
+          light: "#1B1B1B",
+          DEFAULT: "#1B1B1B",
+          dark: "#F5F8FA",
+        },
+        surfaceContainer: {
+          light: "#FCFEFF",
+          DEFAULT: "#FCFEFF",
+          dark: "#313131",
+        },
+        primary: {
+          light: "#008DDE",
+          DEFAULT: "#008DDE",
+          dark: "#65C7FF",
+        },
+        onPrimary: {
+          light: "#FFFFFF",
+          DEFAULT: "#FFFFFF",
+          dark: "#1E1E1E",
+        },
+        secondary: {
+          light: "#6E6E6E",
+          DEFAULT: "#6E6E6E",
+          dark: "#B7B7B7",
+        },
+        accent: {
+          light: "#FFAA00",
+          DEFAULT: "#FFAA00",
+          dark: "#FFC95D",
+        },
+        border: {
+          light: "#D2D2D2",
+          DEFAULT: "#D2D2D2",
+          dark: "#616161",
+        },
+      },
+    },
   },
   plugins: [],
 };
