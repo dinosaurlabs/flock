@@ -7,7 +7,7 @@ import NavBar from "./components/Navbar.jsx";
 function App() {
   return (
     <Router>
-      <main className="min-h-screen text-black bg-surface dark:bg-surface-dark dark:text-white">
+      <main className="text-black bg-surface dark:bg-surface-dark dark:text-white">
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
