@@ -10,7 +10,7 @@ function App() {
       <main className="min-h-screen text-black bg-surface dark:bg-surface-dark dark:text-white">
         <NavBar />
         <Routes>
-          <Route path="*" element={<Home />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </main>
     </Router>
