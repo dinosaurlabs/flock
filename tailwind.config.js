@@ -7,8 +7,6 @@ module.exports = {
     // Path to the tremor module
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
-  // Enable dark mode using class strategy
-  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
