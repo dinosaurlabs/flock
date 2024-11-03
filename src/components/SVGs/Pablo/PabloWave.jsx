@@ -4,6 +4,8 @@ const PabloWave = ({
   bodyColor = "#00A2FF",
   stomachColor = "#65C7FF",
   pupilColor = "#04456A",
+  className,
+  style,
 }) => (
   <svg
     width="500"
@@ -11,6 +13,8 @@ const PabloWave = ({
     viewBox="0 0 500 538"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={`${className}`}
+    style={style}
   >
     {/* Body */}
     <path
