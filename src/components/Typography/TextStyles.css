@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Color Styles */
+.text-primary {
+  @apply text-primary-light dark:text-primary-dark;
+}
+.text-secondary {
+  @apply text-secondary-light dark:text-secondary-dark;
+}
+.text-onSurface {
+  @apply text-onSurface-light dark:text-onSurface-dark;
+}
+
 .label-md {
   font-weight: 700;
   font-size: 0.875rem;

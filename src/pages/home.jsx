@@ -7,9 +7,9 @@ import "../App.css";
 
 function Home() {
   return (
-    <div className="px-6 text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
+    <div className="flex flex-col gap-24 px-6 text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
       {/* Hero Section */}
-      <div className="flex flex-col gap-24">
+      <section className="flex flex-col gap-24">
         {/* Hero Title */}
         <div className="flex flex-col items-start gap-6">
           <Typography textStyle="display-xl">
@@ -23,8 +23,8 @@ function Home() {
             join events with your friends and family.
           </Typography>
           <div className="flex gap-4">
-            <Button buttonSize="sm" text="Join A Flock" />
-            <Button buttonSize="sm" color="secondary" text="Donate" />
+            <Button buttonSize="md" text="Join A Flock" />
+            <Button buttonSize="md" color="secondary" text="Donate" />
           </div>
         </div>
         {/* Hero Image */}
@@ -46,9 +46,20 @@ function Home() {
             />
           </div>
         </div>
-      </div>
-
-      {/* Hero section (Wil and Gannett) */}
+      </section>
+      {/* Features Section */}
+      <section className="flex flex-col gap-24">
+        <div className="flex flex-col items-start gap-14">
+          <div className="flex flex-col items-start gap-6">
+            <Typography textStyle="display-lg">Create a Flock</Typography>
+            <Typography textStyle="body-lg" color="secondary">
+              Flock offers a variety of features to make your event planning
+              experience as seamless as possible.
+            </Typography>
+            <Button buttonSize="md" text="Join A Flock" icon="arrow" />
+          </div>
+        </div>
+      </section>
       {/* How it works section (Riya and Gunnar)*/}
       {/* Frequently asked section (Nina and Analise)*/}
     </div>

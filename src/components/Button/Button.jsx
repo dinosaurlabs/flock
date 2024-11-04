@@ -1,6 +1,7 @@
 import React from "react";
 import { TbChevronsRight } from "react-icons/tb";
 import "./Button.css";
+import Typography from "../Typography/Typography";
 
 function Button({
   text,
@@ -20,7 +21,7 @@ function Button({
       className={`flex items-center rounded-md ${buttonSize} ${color} ${className}`}
       onClick={onClick}
     >
-      <span>{text}</span>
+      <Typography textStyle={`label-${buttonSize}`}>{text}</Typography>
       {icons[icon]}
     </button>
   );
