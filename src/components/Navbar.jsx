@@ -1,7 +1,7 @@
 import React from "react";
 
 function Navbar() {
-  // Manu and Toni
+  // Manu
   return <nav></nav>;
 }
 
