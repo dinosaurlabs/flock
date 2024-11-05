@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin");
 
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
 
-    // Path to the tremor module
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -44,6 +44,11 @@ module.exports = {
           DEFAULT: "#6E6E6E",
           dark: "#B7B7B7",
         },
+        onSecondary: {
+          light: "#FFFFFF",
+          DEFAULT: "#FFFFFF",
+          dark: "#1E1E1E",
+        },
         accent: {
           light: "#FFAA00",
           DEFAULT: "#FFAA00",
@@ -57,5 +62,22 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addComponents, theme }) {
+      addComponents({
+        ".label-md": {
+          fontWeight: "700",
+          fontSize: "0.875rem",
+          fontFamily: '"Nunito", sans-serif',
+          textTransform: "uppercase",
+        },
+        ".label-lg": {
+          fontWeight: "700",
+          fontSize: "1rem",
+          fontFamily: '"Nunito", sans-serif',
+          textTransform: "uppercase",
+        },
+      });
+    }),
+  ],
 };
