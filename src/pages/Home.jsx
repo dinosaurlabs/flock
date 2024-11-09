@@ -6,7 +6,7 @@ function Home() {
       {/* Hero section (Wil and Gannett) */}
 
       {/* How it works section (Riya and Gunnar)*/}
-
+      
       {/* Frequently asked section (Nina and Analise)*/}
     </div>
   );
