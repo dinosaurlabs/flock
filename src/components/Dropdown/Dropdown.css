@@ -1,0 +1,22 @@
+.dropdown {
+    position: static;
+    display: block;
+}
+
+.dropdown-toggle {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    position: absolute;
+    display: none;
+}
+
+.dropdown-title {
+    position:absolute;
+}
+
+.dropdown.open .dropdown-content {
+    display: block;
+}

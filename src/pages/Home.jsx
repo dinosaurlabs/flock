@@ -1,4 +1,7 @@
 import React from "react";
+import Typography from "../components/TextStyles/Typography";
+import Dropdown from "../components/Dropdown/Dropdown";
+
 
 function Home() {
   return (
@@ -8,8 +11,26 @@ function Home() {
       {/* How it works section (Riya and Gunnar)*/}
 
       {/* Frequently asked section (Nina and Analise)*/}
+      <Typography textStyle={"display-lg"} color={"primary"}>
+        Frequently Asked
+      </Typography >
+      {/* <Typography textStyle={"title-sm"} color={"onSurface"}>
+        How do I create a meeting?
+      </Typography>
+      <Typography textStyle={"title-sm"} color={"onSurface"}>
+        Where do I get a join code?
+      </Typography>
+      <Typography textStyle={"title-sm"} color={"onSurface"}>
+        How many meetings can I make per day?
+      </Typography> */}
+
+       <Dropdown title="quesion here" content="Answer"/>
+      
+      
     </div>
   );
 }
+
+
 
 export default Home;
