@@ -17,7 +17,7 @@ function Home() {
       <br></br>
       <Typography color = "secondary" textStyle= "body-lg">Simply select times that work and the dates<br></br>you are trying to meet and we’ll handle the<br></br>rest. It’s really that simple.</Typography>
       <br></br>
-      {<Button phrase = "CREATE A FLOCK" />}
+      {<Button phrase = "CREATE A FLOCK >>" />}
       <div style={{marginBottom: "56px"}}></div>
       {<Photo source = {calendarPhoto} alternate = "Calendar"/>}
 
@@ -27,7 +27,7 @@ function Home() {
       <br></br>
       <Typography color = "secondary" textStyle= "body-lg">Add your availability with the option of<br />importing your google calendar. Don’t worry<br /><i>we don’t collect your information!</i></Typography>
       <br></br>
-      {<Button phrase = "Join a Flock" />}
+      {<Button phrase = "Join a Flock >>" />}
       <div style={{marginBottom: "56px"}}></div>
       {<Photo source = {availablePhoto} alternate = "Availability Selector"/>}
 
@@ -38,7 +38,7 @@ function Home() {
       <Typography color = "secondary" textStyle= "body-lg">View the groups availability and share what<br /> time works best with the group.<br />
       <i>Now go and create your flock!</i></Typography>
       <br></br>
-      {<Button phrase = "Create a Flock" />}
+      {<Button phrase = "Create a Flock >>" />}
       <div style={{marginBottom: "56px"}}></div>
       {<Photo source = {sharePhoto} alternate = "Sharing is Caring"/>}
       
