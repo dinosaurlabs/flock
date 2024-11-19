@@ -10,11 +10,13 @@ function Dropdown({title, content }) {
   
     return (
       <div className="dropdown">
-        <button className="dropdown-toggle" onClick={toggleDropdown}>
+        <button 
+          className="dropdown-toggle" 
+          onClick={toggleDropdown}>
           <Typography textStyle={"title-sm"} color={"onSurface"}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className='dropdown-title'>
               <span>{title}</span>
-              <span>{isOpen? '-' : '+'}</span> 
+              <span style={{marginLeft: '10px'}}>{isOpen? '-' : '+'}</span> 
             </div>
           </Typography>
         </button>

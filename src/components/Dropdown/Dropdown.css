@@ -1,20 +1,27 @@
 .dropdown {
     position: static;
-    display: block;
+    display: flex;
+    width: 100%;
 }
 
 .dropdown-toggle {
     background-color: #f5f5f5;
     cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .dropdown-content {
     position: absolute;
-    display: none;
 }
 
 .dropdown-title {
     position: absolute;
+    display: 'flex';
+    justify-content: 'space-between';
+    align-items: center;
 }
 
 .dropdown.open .dropdown-content {
