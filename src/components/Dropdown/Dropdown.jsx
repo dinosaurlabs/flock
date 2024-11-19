@@ -17,7 +17,7 @@ function Dropdown({title, content }) {
         </button>
         {isOpen && (
           <div className="dropdown-content">
-            <Typography textStyle={"title-sm"} color={"onSurface"}>
+            <Typography textStyle={"body-lg"} color={"Secondary"}>
               {content}
             </Typography>
          </div>

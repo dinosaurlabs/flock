@@ -22,10 +22,14 @@ function Home() {
       </Typography>
       <Typography textStyle={"title-sm"} color={"onSurface"}>
         How many meetings can I make per day?
-      </Typography> */}
+      </Typography> */} 
       
-
-       <Dropdown title="How do I create a meeting" content="Will Answer Later" />
+       <Typography testStyle={"display-lg"} color={"primary"}>
+          Frequently Asked
+       </Typography>
+       <Dropdown title="How do I create a meeting?" content="Will Answer Later" />
+       <Dropdown title="Where do I get a join code?" content="Will Answer Later" />
+       <Dropdown title="How many meetings can I make per day?" content="Will Answer Later" />
       
       
     </div>
