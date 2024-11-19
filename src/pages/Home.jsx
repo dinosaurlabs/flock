@@ -24,13 +24,14 @@ function Home() {
         How many meetings can I make per day?
       </Typography> */} 
       
-       <Typography testStyle={"display-lg"} color={"primary"}>
+       <Typography textStyle={"display-lg"} color={"primary"}>
           Frequently Asked
        </Typography>
-       <Dropdown title="How do I create a meeting?" content="Will Answer Later" />
-       <Dropdown title="Where do I get a join code?" content="Will Answer Later" />
-       <Dropdown title="How many meetings can I make per day?" content="Will Answer Later" />
-      
+       <p style = {{ marginBottom: '24px', marginTop: '24px'}}><Dropdown title="How do I create a meeting?" content="Will Answer Later" /></p>
+       <div className="custom-divider"></div>
+       <p style = {{ marginTop: '24px'}}><Dropdown title="Where do I get a join code?" content="Will Answer Later" /></p>
+       <div className="custom-divider"></div>
+       <p style = {{ marginTop: '24px'}}><Dropdown title="How many meetings can I make per day?" content="Will Answer Later" /></p>
       
     </div>
   );

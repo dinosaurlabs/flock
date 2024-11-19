@@ -12,12 +12,15 @@ function Dropdown({title, content }) {
       <div className="dropdown">
         <button className="dropdown-toggle" onClick={toggleDropdown}>
           <Typography textStyle={"title-sm"} color={"onSurface"}>
-            {title}
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>{title}</span>
+              <span>{isOpen? '-' : '+'}</span> 
+            </div>
           </Typography>
         </button>
         {isOpen && (
           <div className="dropdown-content">
-            <Typography textStyle={"body-lg"} color={"Secondary"}>
+            <Typography textStyle={"body-lg"} color={"secondary"}>
               {content}
             </Typography>
          </div>

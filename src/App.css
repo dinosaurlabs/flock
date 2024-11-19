@@ -9,3 +9,8 @@ body {
 .image-shadow {
   box-shadow: 0px 5px 86.1px 4px rgba(0, 141, 222, 0.2);
 }
+
+.custom-divider {
+  border-top: 1px solid #D2D2D2;
+  margin: 24px 0;
+}
