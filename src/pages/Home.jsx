@@ -11,27 +11,15 @@ function Home() {
       {/* How it works section (Riya and Gunnar)*/}
 
       {/* Frequently asked section (Nina and Analise)*/}
-      {/* <Typography textStyle={"display-lg"} color={"primary"}>
-        Frequently Asked
-      </Typography >
-      <Typography textStyle={"title-sm"} color={"onSurface"}>
-        How do I create a meeting?
-      </Typography>
-      <Typography textStyle={"title-sm"} color={"onSurface"}>
-        Where do I get a join code?
-      </Typography>
-      <Typography textStyle={"title-sm"} color={"onSurface"}>
-        How many meetings can I make per day?
-      </Typography> */} 
-      
+
        <Typography textStyle={"display-lg"} color={"primary"}>
           <div className="mr-24 ml-24">Frequently Asked</div>
        </Typography>
        <p style = {{ marginBottom: '24px', marginTop: '24px'}}><Dropdown title="How do I create a meeting?" content="Will Answer Later" /></p>
        <div className="custom-divider"></div>
-       <p style = {{ marginTop: '24px'}}><Dropdown title="Where do I get a join code?" content="Will Answer Later" /></p>
+       <p style = {{ marginTop: '24px', marginBottom: '24px'}}><Dropdown title="Where do I get a join code?" content="Will Answer Later" /></p>
        <div className="custom-divider"></div>
-       <p style = {{ marginTop: '24px'}}><Dropdown title="How many meetings can I make per day?" content="Will Answer Later" /></p>
+       <p style = {{ marginTop: '24px', marginBottom: '24px'}}><Dropdown title="How many meetings can I make per day?" content="Will Answer Later" /></p>
       
     </div>
   );
