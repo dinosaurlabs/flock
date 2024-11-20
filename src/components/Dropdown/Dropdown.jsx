@@ -11,11 +11,11 @@ function Dropdown({title, content }) {
     return (
       <div className="dropdown">
         <button 
-          className="dropdown-toggle" 
+          className="dropdown-toggle w-full" 
           onClick={toggleDropdown}>
           <Typography textStyle={"title-sm"} color={"onSurface"}>
-            <div className='dropdown-title'>
-              <span>{title}</span>
+            <div className='dropdown-title flex justify-between'>
+              <span>{title}</span> 
               <span style={{marginLeft: '10px'}}>{isOpen? '-' : '+'}</span> 
             </div>
           </Typography>
