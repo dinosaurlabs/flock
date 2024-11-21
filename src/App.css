@@ -13,6 +13,13 @@ body {
 .custom-divider {
   height: 1px;
   background-color: #D2D2D2;
-  width: 75%;
-  margin: 0 auto;
+  width: 100%;
+  margin-top: 6%;
+  margin-bottom: 6%;
+}
+
+.whole-page {
+  margin-left: 6%;
+  margin-right: 6%;
+  margin-top: 6%;
 }

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Typography from "../TextStyles/Typography";
+// import "./Dropdown.css"
 
 function Dropdown({title, content }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +43,7 @@ function Dropdown({title, content }) {
     );
   
     return (
-      <div className="dropdown mr-24 ml-24">
+      <div className="dropdown">
         <button 
           className="dropdown-toggle w-full" 
           onClick={toggleDropdown}>
