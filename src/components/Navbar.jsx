@@ -4,11 +4,10 @@ import FlockLogo from "../components/SVGs/logos/FlockLogo"
 
 function Navbar() {
   
-    return (<nav className="px-4 pb-3 pt-5 fixed" style={{borderBottom: "1px inset solid grey"} }>
+    return (<nav className="px-4 pb-3 pt-5 fixed w-full" style={{ borderBottom: "1px inset solid grey"}}>
         
-        <div className="flex pt-3">
+        <div className="flex pt-3 justify-between" style={{} }>
             <FlockLogo />
-            <div style={{flex:1}}></div>
             <Typography textStyle="" color="secondary">CREATE A FLOCK</Typography>
         </div>
     </nav>);
