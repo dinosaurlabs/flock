@@ -118,13 +118,13 @@ function Home() {
             <Typography textStyle="body-lg" color="secondary">
               View the groups availability and share what time works best with
               the group.
-              <i>Now go and create your flock!</i>
+              <i> Now go and create your flock!</i>
             </Typography>
             <Button buttonSize="md" text="Create a Flock" icon="arrow" />
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center ">
               <img
                 src={ShareImg}
-                className="z-[1] rounded-xl image-shadow"
+                className="z-[1] h-36 rounded-xl image-shadow"
                 alt="Hero"
               />
             </div>
@@ -133,7 +133,7 @@ function Home() {
       </section>
       {/* Frequently asked section (Nina and Analise)*/}
       <Typography textStyle="display-lg">Frequently Asked</Typography>
-      <div className="w-100">
+      <div className="">
         <Accordion items={accordionItems}></Accordion>
       </div>
     </div>

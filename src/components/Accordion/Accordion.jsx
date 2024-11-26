@@ -9,16 +9,14 @@ function Accordion({ items }) {
   // items = [{question: 'title', answer: 'content'}]
 
   return items.map((item, i) => {
-    console.log(item);
     return (
-      <div className="w-max">
+      <div className="">
         <AccordionItem
           active={active === i}
           onClick={onClick}
           index={i}
           item={item}
         />
-        <hr></hr>
       </div>
     );
   });
@@ -27,7 +25,7 @@ function Accordion({ items }) {
 function AccordionItem({ active, onClick, index, item }) {
   // active Boolean
   return (
-    <div className="flex flex-col w-max">
+    <div className="flex flex-col gap-3">
       <div className="flex flex-row justify-between">
         <Typography textStyle="body-lg">{item.question}</Typography>
         {active ? (
@@ -41,7 +39,9 @@ function AccordionItem({ active, onClick, index, item }) {
           {item.answer}
         </Typography>
       )}
-      <hr></hr>
+      <div className="h-3">
+        <hr className="bold"></hr>
+      </div>
     </div>
   );
 }
