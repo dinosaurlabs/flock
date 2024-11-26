@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import Typography from "../Typography/Typography";
 
 function Accordion({ items }) {
-  const [active, setActive] = useState(null);
+  const [active, setActive] = useState([]);
   const onClick = (index) => {
-    setActive(index);
+    if (active.includes(index)) {
+      setActive(active.filter((item) => item !== index));
+    } else {
+      setActive([...active, index]);
+    }
   };
   // items = [{question: 'title', answer: 'content'}]
 
@@ -12,7 +16,7 @@ function Accordion({ items }) {
     return (
       <div className="">
         <AccordionItem
-          active={active === i}
+          active={active.includes(i)}
           onClick={onClick}
           index={i}
           item={item}
@@ -29,7 +33,7 @@ function AccordionItem({ active, onClick, index, item }) {
       <div className="flex flex-row justify-between">
         <Typography textStyle="body-lg">{item.question}</Typography>
         {active ? (
-          <button onClick={() => onClick(null)}>-</button>
+          <button onClick={() => onClick(index)}>-</button>
         ) : (
           <button onClick={() => onClick(index)}>+</button>
         )}

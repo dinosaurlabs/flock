@@ -124,7 +124,7 @@ function Home() {
             <div className="relative flex items-center justify-center ">
               <img
                 src={ShareImg}
-                className="z-[1] h-36 rounded-xl image-shadow"
+                className="z-[1] rounded-xl image-shadow"
                 alt="Hero"
               />
             </div>
