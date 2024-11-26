@@ -117,7 +117,7 @@ function Home() {
             </Typography>
             <Typography textStyle="body-lg" color="secondary">
               View the groups availability and share what time works best with
-              the group.
+              the group.<br></br>
               <i> Now go and create your flock!</i>
             </Typography>
             <Button buttonSize="md" text="Create a Flock" icon="arrow" />
