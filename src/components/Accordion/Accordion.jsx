@@ -14,14 +14,12 @@ function Accordion({ items }) {
 
   return items.map((item, i) => {
     return (
-      <div className="">
-        <AccordionItem
-          active={active.includes(i)}
-          onClick={onClick}
-          index={i}
-          item={item}
-        />
-      </div>
+      <AccordionItem
+        active={active.includes(i)}
+        onClick={onClick}
+        index={i}
+        item={item}
+      />
     );
   });
 }
@@ -29,13 +27,17 @@ function Accordion({ items }) {
 function AccordionItem({ active, onClick, index, item }) {
   // active Boolean
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       <div className="flex flex-row justify-between">
         <Typography textStyle="body-lg">{item.question}</Typography>
         {active ? (
-          <button onClick={() => onClick(index)}>-</button>
+          <button className="transition" onClick={() => onClick(index)}>
+            <b>–</b>
+          </button>
         ) : (
-          <button onClick={() => onClick(index)}>+</button>
+          <button className="transition-opacity" onClick={() => onClick(index)}>
+            <b>+</b>
+          </button>
         )}
       </div>
       {active && (
@@ -43,8 +45,8 @@ function AccordionItem({ active, onClick, index, item }) {
           {item.answer}
         </Typography>
       )}
-      <div className="h-3">
-        <hr className="bold"></hr>
+      <div className="pb-4">
+        <hr></hr>
       </div>
     </div>
   );

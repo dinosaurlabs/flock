@@ -12,7 +12,7 @@ import Accordion from "../components/Accordion/Accordion";
 function Home() {
   const accordionItems = [
     {
-      question: "How do I create a Meeting",
+      question: "How do I create a Meeting?",
       answer: "Simply click on the start a meeting button",
     },
     {
@@ -77,7 +77,7 @@ function Home() {
               and we’ll handle the rest. <i>It’s really that simple.</i>
             </Typography>
             <Button buttonSize="md" text="Create a Flock" icon="arrow" />
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center mt-6">
               <img
                 src={CreateImg}
                 className="z-[1] rounded-xl image-shadow"
@@ -99,7 +99,7 @@ function Home() {
               calendar. Don’t worry <i>we don’t collect your information!</i>
             </Typography>
             <Button buttonSize="md" text="Join A Flock" icon="arrow" />
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center mt-6">
               <img
                 src={AvailabilityImg}
                 className="z-[1] rounded-xl image-shadow"
@@ -121,7 +121,7 @@ function Home() {
               <i> Now go and create your flock!</i>
             </Typography>
             <Button buttonSize="md" text="Create a Flock" icon="arrow" />
-            <div className="relative flex items-center justify-center ">
+            <div className="relative flex items-center justify-center mt-6 ">
               <img
                 src={ShareImg}
                 className="z-[1] rounded-xl image-shadow"
@@ -132,10 +132,12 @@ function Home() {
         </div>
       </section>
       {/* Frequently asked section (Nina and Analise)*/}
-      <Typography textStyle="display-lg">Frequently Asked</Typography>
-      <div className="">
+      <section>
+        <div className="pb-10">
+          <Typography textStyle="display-lg">Frequently Asked</Typography>
+        </div>
         <Accordion items={accordionItems}></Accordion>
-      </div>
+      </section>
     </div>
   );
 }
