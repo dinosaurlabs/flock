@@ -7,8 +7,23 @@ import ShareImg from "../assets/images/home-share.png";
 import AvailabilityImg from "../assets/images/home-availability.png";
 import PabloWave from "../components/SVGs/Pablo/PabloWave";
 import "../App.css";
+import Accordion from "../components/Accordion/Accordion";
 
 function Home() {
+  const accordionItems = [
+    {
+      question: "How do I create a Meeting",
+      answer: "Simply click on the start a meeting button",
+    },
+    {
+      question: "Where do I get a join code? ",
+      answer: "Simply click on the start a meeting button",
+    },
+    {
+      question: "How many meetings can I make per day?",
+      answer: "Simply click on the start a meeting button",
+    },
+  ];
   return (
     <div className="flex flex-col gap-24 px-6 text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
       {/* Hero Section */}
@@ -118,6 +133,9 @@ function Home() {
       </section>
       {/* Frequently asked section (Nina and Analise)*/}
       <Typography textStyle="display-lg">Frequently Asked</Typography>
+      <div className="w-100">
+        <Accordion items={accordionItems}></Accordion>
+      </div>
     </div>
   );
 }
