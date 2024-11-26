@@ -2,6 +2,9 @@ import React from "react";
 import Button from "../components/Button/Button";
 import Typography from "../components/Typography/Typography";
 import HeroImg from "../assets/images/home-hero.png";
+import CreateImg from "../assets/images/home-create.png";
+import ShareImg from "../assets/images/home-share.png";
+import AvailabilityImg from "../assets/images/home-availability.png";
 import PabloWave from "../components/SVGs/Pablo/PabloWave";
 import "../App.css";
 
@@ -51,17 +54,70 @@ function Home() {
       <section className="flex flex-col gap-24">
         <div className="flex flex-col items-start gap-14">
           <div className="flex flex-col items-start gap-6">
-            <Typography textStyle="display-lg">Create a Flock</Typography>
-            <Typography textStyle="body-lg" color="secondary">
-              Flock offers a variety of features to make your event planning
-              experience as seamless as possible.
+            <Typography color="primary-light" textStyle="display-lg">
+              Create a Flock
             </Typography>
-            <Button buttonSize="md" text="Join A Flock" icon="arrow" />
+            <Typography textStyle="body-lg" color="secondary">
+              Simply select times that work and the dates you are trying to meet
+              and we’ll handle the rest. <i>It’s really that simple.</i>
+            </Typography>
+            <Button buttonSize="md" text="Create a Flock" icon="arrow" />
+            <div className="relative flex items-center justify-center">
+              <img
+                src={CreateImg}
+                className="z-[1] rounded-xl image-shadow"
+                alt="Hero"
+              />
+            </div>
           </div>
         </div>
       </section>
       {/* How it works section (Riya and Gunnar)*/}
+      <section className="flex flex-col gap-24">
+        <div className="flex flex-col items-start gap-14">
+          <div className="flex flex-col items-start gap-6">
+            <Typography color="primary-light" textStyle="display-lg">
+              Select Availability
+            </Typography>
+            <Typography textStyle="body-lg" color="secondary">
+              Add your availability with the option of importing your google
+              calendar. Don’t worry <i>we don’t collect your information!</i>
+            </Typography>
+            <Button buttonSize="md" text="Join A Flock" icon="arrow" />
+            <div className="relative flex items-center justify-center">
+              <img
+                src={AvailabilityImg}
+                className="z-[1] rounded-xl image-shadow"
+                alt="Hero"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="flex flex-col gap-24">
+        <div className="flex flex-col items-start gap-14">
+          <div className="flex flex-col items-start gap-6">
+            <Typography color="primary-light" textStyle="display-lg">
+              Collect and Share
+            </Typography>
+            <Typography textStyle="body-lg" color="secondary">
+              View the groups availability and share what time works best with
+              the group.
+              <i>Now go and create your flock!</i>
+            </Typography>
+            <Button buttonSize="md" text="Create a Flock" icon="arrow" />
+            <div className="relative flex items-center justify-center">
+              <img
+                src={ShareImg}
+                className="z-[1] rounded-xl image-shadow"
+                alt="Hero"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
       {/* Frequently asked section (Nina and Analise)*/}
+      <Typography textStyle="display-lg">Frequently Asked</Typography>
     </div>
   );
 }
