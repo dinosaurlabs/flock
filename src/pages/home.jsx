@@ -133,7 +133,7 @@ function Home() {
       </section>
       {/* Frequently asked section (Nina and Analise)*/}
       <section>
-        <div className="pb-10">
+        <div className="pb-6">
           <Typography textStyle="display-lg">Frequently Asked</Typography>
         </div>
         <Accordion items={accordionItems}></Accordion>
