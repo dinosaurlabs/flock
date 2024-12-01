@@ -15,6 +15,7 @@ function Accordion({ items }) {
   return items.map((item, i) => {
     return (
       <AccordionItem
+        key={i}
         active={active.includes(i)}
         onClick={onClick}
         index={i}
@@ -25,19 +26,17 @@ function Accordion({ items }) {
 }
 
 function AccordionItem({ active, onClick, index, item }) {
-  // active Boolean
   return (
-    <div className="flex flex-col gap-5">
+    <div
+      className={`flex flex-col gap-5 cursor-pointer`}
+      onClick={() => onClick(index)} // Make the whole item clickable
+    >
       <div className="flex flex-row justify-between">
         <Typography textStyle="body-lg">{item.question}</Typography>
         {active ? (
-          <button className="transition" onClick={() => onClick(index)}>
-            <b>–</b>
-          </button>
+          <b className="transition">–</b>
         ) : (
-          <button className="transition-opacity" onClick={() => onClick(index)}>
-            <b>+</b>
-          </button>
+          <b className="transition-opacity">+</b>
         )}
       </div>
       {active && (
@@ -46,7 +45,7 @@ function AccordionItem({ active, onClick, index, item }) {
         </Typography>
       )}
       <div className="pb-4">
-        <hr></hr>
+        <hr />
       </div>
     </div>
   );
