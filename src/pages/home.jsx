@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Button from "../components/Button/Button";
 import Typography from "../components/Typography/Typography";
 import HeroImg from "../assets/images/home-hero.png";
@@ -76,7 +77,9 @@ function Home() {
               Simply select times that work and the dates you are trying to meet
               and we’ll handle the rest. <i>It’s really that simple.</i>
             </Typography>
-            <Button buttonSize="md" text="Create a Flock" icon="arrow" />
+            <Link to="/create">
+              <Button buttonSize="md" text="Create a Flock" icon="arrow" />
+            </Link>
             <div className="relative flex items-center justify-center mt-6">
               <img
                 src={CreateImg}
@@ -120,7 +123,9 @@ function Home() {
               the group.<br></br>
               <i> Now go and create your flock!</i>
             </Typography>
-            <Button buttonSize="md" text="Create a Flock" icon="arrow" />
+            <Link to="/create">
+              <Button buttonSize="md" text="Create a Flock" icon="arrow" />
+            </Link>
             <div className="relative flex items-center justify-center mt-6 ">
               <img
                 src={ShareImg}

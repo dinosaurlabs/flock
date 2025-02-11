@@ -6,6 +6,7 @@ import Typography from "../Typography/Typography";
 function Button({
   text,
   icon,
+  type,
   buttonSize = "md",
   className = "",
   onClick,
@@ -18,6 +19,7 @@ function Button({
 
   return (
     <button
+      type={type}
       className={`flex items-center rounded-md ${buttonSize} ${color} ${className}`}
       onClick={onClick}
     >
