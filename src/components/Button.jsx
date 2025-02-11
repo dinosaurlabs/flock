@@ -1,16 +1,15 @@
-import React from 'react'
-import Typography from './TextStyles/Typography'
 
-function Button ({ buttonSize="md", className="", color="primary", onClick, text, icon }) {
-    const icons = {
-        
-    }
+import React from "react";
+import Typography from "./TextStyles/Typography";
 
-    return (
-        <button className={`flex items-center rounded-md ${buttonSize} ${color} ${className}`} onClick={onClick}>
-            <Typography textStyle={`label-${buttonSize}`}>{text}</Typography>{icons[icon]}
-        </button>
-    );
+function Button({ phrase }) {
+  return (
+    <div>
+      <button className="px-4 py-3 rounded-md bg-primary" pr-16px>
+        <Typography textStyle="label-lg">{phrase}</Typography>
+      </button>
+    </div>
+  );
 }
 
 export default Button;
