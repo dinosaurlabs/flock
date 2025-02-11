@@ -1,0 +1,30 @@
+.dropdown {
+    position: static;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.dropdown-toggle {
+    background-color: #f5f5f5;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-content {
+    position: absolute;
+}
+
+.dropdown-title {
+    position: absolute;
+    display: 'flex';
+    justify-content: 'space-between';
+    align-items: center;
+}
+
+.dropdown.open .dropdown-content {
+    display: block;
+}
