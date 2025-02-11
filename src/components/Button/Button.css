@@ -1,0 +1,17 @@
+/* Colors */
+.primary {
+  @apply text-onPrimary-light dark:text-onPrimary-dark bg-primary-light dark:bg-primary-dark;
+}
+
+.secondary {
+  @apply text-onSecondary-light dark:text-onSecondary-dark bg-secondary-light dark:bg-secondary-dark;
+}
+
+/* Sizes */
+.sm {
+  @apply py-2.5 px-3.5 gap-1 label-md;
+}
+
+.md {
+  @apply py-3 px-4 gap-2 label-lg;
+}
