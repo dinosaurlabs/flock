@@ -10,6 +10,7 @@ import AvailabilityImg from "../assets/images/home-availability.png";
 import PabloWave from "../components/SVGs/Pablo/PabloWave";
 import "../App.css";
 import Accordion from "../components/Accordion/Accordion";
+import Dropdown from "../components/Dropdown/Dropdown";
 
 function Home() {
   const accordionItems = [
