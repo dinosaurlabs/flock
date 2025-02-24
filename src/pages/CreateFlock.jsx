@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Button from "../components/Button/Button";
+import { DayPicker } from "react-day-picker";
+import { format } from "date-fns";
+import "react-day-picker/dist/style.css";
 import Dropdown from "../components/Dropdown/Dropdown";
 
 const CreateFlock = () => {
@@ -8,6 +11,7 @@ const CreateFlock = () => {
   const [allowAnonymous, setAllowAnonymous] = useState(false);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+    const [selectedDates, setSelectedDates] = useState([]);
   
   const handleSubmitFlockName = (e) => {
     e.preventDefault();
@@ -30,12 +34,8 @@ const CreateFlock = () => {
           />
         </div>
 
-        {/* Submit */}
-        <Button type="submit" text="Create Your Flock" />
-      </form>
-
-      <div>
-        <form>
+        
+      
           {/*Times that Work*/}
           <div className="flex flex-col gap-3">
             <label className="font-sans text-base">Times that work:</label>
@@ -65,9 +65,23 @@ const CreateFlock = () => {
                     />
                   </label>
                 </div>
-          </div>
+              </div>
+              {/*Select Dates*/}
+              <div>
+                  <DayPicker
+                      mode="multiple"
+                      selected={selectedDates}
+                      onChange={setSelectedDates}
+                      styles={{
+                          day_selected: { backgroundColor:"lightBlue !important", textColor:"primary",fontWeight:"bold"},
+                          day_current: {textColor:"primary"}
+                      }}
+                  ></DayPicker>
+              </div>
+              {/* Submit */}
+              <Button type="submit" text="Create Your Flock" />
         </form>
-      </div>
+      
     </div>
   );
 };
