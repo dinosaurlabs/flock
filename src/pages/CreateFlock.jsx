@@ -15,17 +15,17 @@ const CreateFlock = () => {
     console.log({ flockName, startTime, endTime, allowAnonymous, hourAvailability });
   }; 
   return (
-    <div className="w-full min-h-screen flex gap-24 px-6 text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
-      <form onSubmit={handleSubmitFlockName} className="space-y-4">
+    <div className="w-full max-w-5xl mx-auto min-h-screen flex justify-evenly space-x-16 px-6 text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
+      <form onSubmit={handleSubmitFlockName} className="space-y-4 w-1/2">
         {/* Flock Name */}
-        <div className="flex:1 flex-col gap-3">
+        <div className="flex flex-col gap-3">
           <label className="font-sans text-base">Flock Name:</label>
           <input
             type="text"
             placeholder="Flock Name"
             value={flockName}
             onChange={(e) => setFlockName(e.target.value)}
-            className="w-full p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
+            className="p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
           />
           {/*Allow Anonymous Attendees*/}
           <div className="flex gap-3">
@@ -43,22 +43,22 @@ const CreateFlock = () => {
         <Button type="submit" text="Create Your Flock" />
       </form>
 
-      <div>
-        <form>
+      <div className="w-1/2">
+        <form className="w-full">
           {/*Times that Work*/}
-          <div className="flex:1 flex-col gap-3">
+          <div className="w-full flex flex-col w-full gap-3">
             <label className="font-sans text-base">Times that work:</label>
               <div className="flex gap-3">
                 <select 
                   name="Start Time"
-                  className="w-full p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
+                  className="w-1/2 p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
                 >
                   <option value="" selected disabled>Start Time</option>
                   <option value="Option 1">This is an option</option>
                 </select>
                 <select 
                   name="End Time"
-                  className="w-full p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
+                  className="w-1/2 p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
                 >
                   <option value="" selected disabled>End Time</option>
                   <option value="Option 1">This is an option</option>
