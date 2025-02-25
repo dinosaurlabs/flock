@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import Button from "../components/Button/Button";
-import { DayPicker } from "react-day-picker";
-import { format } from "date-fns";
-import "react-day-picker/dist/style.css";
 import Dropdown from "../components/Dropdown/Dropdown";
 
 const CreateFlock = () => {
@@ -12,14 +9,11 @@ const CreateFlock = () => {
   const [hourAvailability, setHourAvailability] = useState(false);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-    const [selectedDates, setSelectedDates] = useState([]);
   
   const handleSubmitFlockName = (e) => {
     e.preventDefault();
     console.log({ flockName, startTime, endTime, allowAnonymous, hourAvailability });
   }; 
-
-
   return (
     <div className="w-full min-h-screen flex gap-24 px-6 text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
       <form onSubmit={handleSubmitFlockName} className="space-y-4">
@@ -35,16 +29,16 @@ const CreateFlock = () => {
           />
           {/*Allow Anonymous Attendees*/}
           <div className="flex gap-3">
-                  <label className="flex gap-3">
+                  <label className="flex gap-3 text-secondary">
                     <input type="checkbox" 
-                    value={allowAnonymous}
-                    className="p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
+                    checked={allowAnonymous}
+                    onChange={() => setAllowAnonymous(!allowAnonymous)}
+                    className="p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark w-5 h-5"
                     />
                     Allow anonymous attendees
                   </label>
                 </div>
         </div>
-
         {/* Submit */}
         <Button type="submit" text="Create Your Flock" />
       </form>
@@ -72,31 +66,18 @@ const CreateFlock = () => {
               </div>
                 {/*24 hour availability*/}
                 <div className="flex gap-3">
-                  <label className="flex gap-3">
+                  <label className="flex gap-3 text-secondary">
                     <input type="checkbox" 
-                    value={hourAvailability}
-                    className="p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
+                    checked={hourAvailability}
+                    onChange={() => setHourAvailability(!hourAvailability)}
+                    className="p-2 font-sans border:rounded-full bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark w-5 h-5"
                     />
                     24 Hour Availability
                   </label>
                 </div>
-              </div>
-              {/*Select Dates*/}
-              <div>
-                  <DayPicker
-                      mode="multiple"
-                      selected={selectedDates}
-                      onChange={setSelectedDates}
-                      styles={{
-                          day_selected: { backgroundColor:"lightBlue !important", textColor:"primary",fontWeight:"bold"},
-                          day_current: {textColor:"primary"}
-                      }}
-                  ></DayPicker>
-              </div>
-              {/* Submit */}
-              <Button type="submit" text="Create Your Flock" />
+          </div>
         </form>
-      
+      </div>
     </div>
   );
 };

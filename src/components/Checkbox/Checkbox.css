@@ -1,0 +1,5 @@
+.checkbox {
+    display: flex;
+    position: static;
+    width: 6;
+}
