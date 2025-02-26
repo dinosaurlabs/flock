@@ -19,7 +19,7 @@ const CreateFlock = () => {
       <form onSubmit={handleSubmitFlockName} className="space-y-4 w-1/2">
         {/* Flock Name */}
         <div className="flex flex-col gap-3">
-          <label className="font-sans text-base">Flock Name:</label>
+          <label className="font-sans title-sm">Flock Name:</label>
           <input
             type="text"
             placeholder="Flock Name"
@@ -47,7 +47,7 @@ const CreateFlock = () => {
         <form className="w-full">
           {/*Times that Work*/}
           <div className="w-full flex flex-col w-full gap-3">
-            <label className="font-sans text-base">Times that work:</label>
+            <label className="font-sans title-sm">Times that work:</label>
               <div className="flex gap-3">
                 <select 
                   name="Start Time"
