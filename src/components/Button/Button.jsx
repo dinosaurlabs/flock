@@ -1,5 +1,5 @@
 import React from "react";
-import { TbChevronsRight } from "react-icons/tb";
+import { ChevronsRight } from "lucide-react";
 import "./Button.css";
 import Typography from "../Typography/Typography";
 
@@ -14,13 +14,13 @@ function Button({
 }) {
   // Icon dictionary
   const icons = {
-    arrow: <TbChevronsRight className="text-current" />,
+    arrow: <ChevronsRight className="text-current" />,
   };
 
   return (
     <button
       type={type}
-      className={`flex items-center rounded-md ${buttonSize} ${color} ${className}`}
+      className={`flex items-center rounded-full ${buttonSize} ${color} ${className}`}
       onClick={onClick}
     >
       <Typography textStyle={`label-${buttonSize}`}>{text}</Typography>

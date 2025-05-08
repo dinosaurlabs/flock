@@ -11,7 +11,7 @@ module.exports = {
     extend: {
       fontFamily: {
         display: ["Nunito", "sans-serif"],
-        sans: ["Cabin", "sans-serif"],
+        sans: ["Geist", "sans-serif"],
       },
       colors: {
         surface: {

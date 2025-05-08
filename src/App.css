@@ -2,24 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: '24px';
-}
-
 .image-shadow {
   box-shadow: 0px 5px 86.1px 4px rgba(0, 141, 222, 0.2);
-}
-
-.custom-divider {
-  height: 1px;
-  background-color: #D2D2D2;
-  width: 100%;
-  margin-top: 6%;
-  margin-bottom: 6%;
 }
 
 .whole-page {
   margin-left: 6%;
   margin-right: 6%;
   margin-top: 6%;
+}
+
+/* Custom scrollbar for textarea overflow */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d2d2d2;
+  border-radius: 10px;
+}
+
+/* Firefox scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #828282ff transparent;
 }
