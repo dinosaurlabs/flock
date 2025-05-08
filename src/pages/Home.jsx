@@ -45,7 +45,9 @@ function Home() {
           </Typography>
           <div className="flex gap-4">
             <Button buttonSize="md" text="Join A Flock" />
-            <Button buttonSize="md" color="secondary" text="Donate" />
+            <Link to="/ai-planner">
+              <Button buttonSize="md" color="secondary" text="Try AI Planner" />
+            </Link>
           </div>
         </div>
         {/* Hero Image */}
@@ -77,7 +79,7 @@ function Home() {
             </Typography>
             <Typography textStyle="body-lg" color="secondary">
               Simply select times that work and the dates you are trying to meet
-              and we’ll handle the rest. <i>It’s really that simple.</i>
+              and we'll handle the rest. <i>It's really that simple.</i>
             </Typography>
             <Link to="/create">
               <Button buttonSize="md" text="Create a Flock" icon="arrow" />
@@ -101,7 +103,7 @@ function Home() {
             </Typography>
             <Typography textStyle="body-lg" color="secondary">
               Add your availability with the option of importing your google
-              calendar. Don’t worry <i>we don’t collect your information!</i>
+              calendar. Don't worry <i>we don't collect your information!</i>
             </Typography>
             <Button buttonSize="md" text="Join A Flock" icon="arrow" />
             <div className="relative flex items-center justify-center mt-6">
@@ -138,16 +140,51 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* AI Planner Feature Highlight */}
+      <section className="flex flex-col gap-24">
+        <div className="flex flex-col items-start gap-14">
+          <div className="flex flex-col items-start gap-6">
+            <Typography color="primary-light" textStyle="display-lg">
+              AI-Powered Event Planning
+            </Typography>
+            <Typography textStyle="body-lg" color="secondary">
+              Let our AI assistant help you create the perfect scheduling setup
+              for your event. Just describe what you need, and it will generate
+              a personalized When2Meet-style solution.
+            </Typography>
+            <Link to="/ai-planner">
+              <Button buttonSize="md" text="Try AI Planner" icon="arrow" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Frequently asked section (Nina and Analise)*/}
       <div className="whole-page">
-       <Typography textStyle={"display-lg"} color={"primary"}>
-          <div className="mr-24 ml-24 mt-5 mb-5">Frequently Asked</div>
-       </Typography>
-       <p><Dropdown title="How do I create a meeting?" content="Will Answer Later" /></p>
-       <div className="custom-divider"></div>
-       <p><Dropdown title="Where do I get a join code?" content="Will Answer Later" /></p>
-       <div className="custom-divider"></div>
-       <p><Dropdown title="How many meetings can I make per day?" content="Will Answer Later" /></p>
+        <Typography textStyle={"display-lg"} color={"primary"}>
+          <div className="mt-5 mb-5 ml-24 mr-24">Frequently Asked</div>
+        </Typography>
+        <p>
+          <Dropdown
+            title="How do I create a meeting?"
+            content="Will Answer Later"
+          />
+        </p>
+        <div className="custom-divider"></div>
+        <p>
+          <Dropdown
+            title="Where do I get a join code?"
+            content="Will Answer Later"
+          />
+        </p>
+        <div className="custom-divider"></div>
+        <p>
+          <Dropdown
+            title="How many meetings can I make per day?"
+            content="Will Answer Later"
+          />
+        </p>
       </div>
       <section>
         <div className="pb-6">
@@ -157,9 +194,6 @@ function Home() {
       </section>
     </div>
   );
-
 }
-
-
 
 export default Home;

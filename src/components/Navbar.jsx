@@ -12,11 +12,18 @@ function Navbar() {
         <LogoFull />
       </Link>
 
-      <Link to="/create">
-        <Typography textStyle={"label-lg"} color="secondary">
-          Create a Flock
-        </Typography>
-      </Link>
+      <div className="flex gap-6">
+        <Link to="/ai-planner">
+          <Typography textStyle={"label-lg"} color="secondary">
+            AI Planner
+          </Typography>
+        </Link>
+        <Link to="/create">
+          <Typography textStyle={"label-lg"} color="secondary">
+            Create a Flock
+          </Typography>
+        </Link>
+      </div>
     </nav>
   );
 }

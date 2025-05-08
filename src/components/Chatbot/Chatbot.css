@@ -1,0 +1,224 @@
+.chatbot-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 500px;
+  background-color: var(--color-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-header {
+  padding: 16px;
+  background-color: var(--color-surface-variant);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bot-message {
+  align-self: flex-start;
+  background-color: var(--color-surface-variant);
+  border-bottom-left-radius: 4px;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: var(--color-primary-light);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chatbot-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--color-surface);
+}
+
+.chatbot-input {
+  display: flex;
+  padding: 12px 16px;
+  background-color: var(--color-surface);
+}
+
+.chatbot-input-field {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  background-color: var(--color-surface-variant);
+  margin-right: 12px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.chatbot-input-field:focus {
+  border-color: var(--color-primary-light);
+}
+
+.chatbot-input-field:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.chatbot-send-button {
+  border-radius: 24px !important;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px !important;
+  width: fit-content;
+}
+
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  float: left;
+  margin: 0 1px;
+  background-color: #9e9ea1;
+  display: block;
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0% {
+    transform: translateY(0px);
+    background-color: #9e9ea1;
+  }
+  28% {
+    transform: translateY(-6px);
+    background-color: #5f6368;
+  }
+  44% {
+    transform: translateY(0px);
+    background-color: #9e9ea1;
+  }
+}
+
+/* Create event button */
+.create-event-container {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  animation: fadeInDown 0.5s;
+}
+
+.create-event-button {
+  transition: all 0.3s ease !important;
+}
+
+.create-event-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .chatbot-container {
+    background-color: var(--color-surface-dark);
+  }
+
+  .chatbot-header {
+    background-color: var(--color-surface-variant-dark);
+  }
+
+  .bot-message {
+    background-color: var(--color-surface-variant-dark);
+  }
+
+  .user-message {
+    background-color: var(--color-primary-dark);
+  }
+
+  .chatbot-footer {
+    background-color: var(--color-surface-dark);
+  }
+
+  .chatbot-input {
+    background-color: var(--color-surface-dark);
+  }
+
+  .chatbot-input-field {
+    background-color: var(--color-surface-variant-dark);
+    color: white;
+  }
+
+  .typing-indicator span {
+    background-color: #5f6368;
+  }
+
+  .typing-indicator span:nth-child(1),
+  .typing-indicator span:nth-child(2),
+  .typing-indicator span:nth-child(3) {
+    background-color: #5f6368;
+  }
+
+  @keyframes typing {
+    0% {
+      transform: translateY(0px);
+      background-color: #5f6368;
+    }
+    28% {
+      transform: translateY(-6px);
+      background-color: #9e9ea1;
+    }
+    44% {
+      transform: translateY(0px);
+      background-color: #5f6368;
+    }
+  }
+}
