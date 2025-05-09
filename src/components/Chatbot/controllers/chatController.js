@@ -93,8 +93,15 @@ export async function processMessage(userMessage, state, onEventCreated) {
         });
         setEventInfo(newEventInfo);
 
-        // Create the event if we have all required info and should create
-        if (shouldCreateEvent && hasRequiredInfo(newEventInfo)) {
+        // IMPORTANT: DO NOT automatically create the event
+        // Instead, just update event info and let the card handle creation
+        // Only create event if the message explicitly requests it
+        if (
+          shouldCreateEvent &&
+          userMessage.toLowerCase().includes("yes") &&
+          userMessage.toLowerCase().includes("create") &&
+          hasRequiredInfo(newEventInfo)
+        ) {
           await createEventFromInfo(
             newEventInfo,
             addBotMessage,
@@ -106,8 +113,15 @@ export async function processMessage(userMessage, state, onEventCreated) {
         }
       }
 
-      // Add bot message with the response
-      addBotMessage(message);
+      // Add bot message with the response (unless all info collected)
+      if (!hasRequiredInfo(eventInfo) || !message.includes("create")) {
+        addBotMessage(message);
+      } else {
+        // If we have all info, add an instruction to use the card
+        addBotMessage(
+          "Please review the event details and click CREATE FLOCK to confirm."
+        );
+      }
 
       // Update conversation history
       setConversationHistory([
@@ -174,8 +188,12 @@ export async function createEventFromInfo(
       );
 
       if (onEventCreated) {
+        // Make sure to pass the eventId to the callback
         onEventCreated(eventId);
       }
+
+      // Return the eventId for any promise handlers
+      return { success: true, eventId };
     } else {
       throw error;
     }
@@ -184,5 +202,6 @@ export async function createEventFromInfo(
     addBotMessage(
       "I encountered an error while creating the event. Please try again."
     );
+    return { success: false, error };
   }
 }

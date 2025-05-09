@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { REQUIRED_INFO } from "../utils/eventUtils";
+import { REQUIRED_INFO, hasRequiredInfo } from "../utils/eventUtils";
 
 /**
  * Custom hook for managing chatbot state
@@ -33,6 +33,20 @@ export function useChatState() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Track when eventInfo has all required fields
+  useEffect(() => {
+    if (hasRequiredInfo(eventInfo)) {
+      // Log for debugging
+      console.log("📅 All required event info collected:", eventInfo);
+
+      // Dispatch a custom event that Home.jsx can listen for
+      const event = new CustomEvent("eventInfoComplete", {
+        detail: { eventInfo },
+      });
+      window.dispatchEvent(event);
+    }
+  }, [eventInfo]);
+
   // Generate a unique message ID
   const generateUniqueId = (prefix) => {
     return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -64,6 +78,12 @@ export function useChatState() {
       sender: "bot",
       ...(eventId && { eventId }),
     };
+
+    // Log for debugging when eventId is present
+    if (eventId) {
+      console.log(`📢 Bot message with eventId: ${eventId}`, botMessage);
+    }
+
     setMessages((prev) => [...prev, botMessage]);
 
     // Update conversation history
