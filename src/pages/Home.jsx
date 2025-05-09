@@ -17,7 +17,7 @@ function Home() {
   // inline style for the blob
   const blobStyle = {
     position: "absolute",
-    top: "10%",
+    top: "0%",
     left: "0%",
     width: "100%",
     height: "100%",
@@ -36,16 +36,16 @@ function Home() {
       <div style={blobStyle} aria-hidden="true" />
 
       {/* ——— your hero content ——— */}
-      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-6 -mt-20">
+      <main className="relative z-0 flex flex-col items-center justify-center flex-1 px-6 -mt-20">
         <div className="flex flex-col items-center gap-9">
           <div className="flex flex-col items-center gap-2">
             <div className="relative flex items-center space-x-8">
-              <PabloWave className="w-12 h-12 -rotate-12" />
+              <PabloWave className="w-14 h-14 -rotate-12" />
               <h1 className="text-5xl font-medium text-center text-black font-display dark:text-white">
                 Events take flight on{" "}
                 <span className="font-bold text-primary">Flock</span>
               </h1>
-              <PabloWave className="w-12 h-12 transform -scale-x-100 rotate-12" />
+              <PabloWave className="transform w-14 h-14 -scale-x-100 rotate-12" />
             </div>
             <p className="text-lg font-medium text-center text-secondary">
               Create or join a flock without all the hassle.
@@ -63,7 +63,7 @@ function Home() {
                 placeholder="Describe the event you are trying to schedule or copy and paste your code!"
               />
               <div className="flex justify-end">
-                <button className="p-2 rounded-xl bg-border dark:bg-border-dark text-secondary">
+                <button className={`p-1 rounded-xl ${inputText.trim() ? 'bg-primary dark:bg-primary-dark text-onPrimary dark:text-onPrimary-dark' : 'bg-border dark:bg-border-dark text-secondary'}`}>
                   <ArrowUpRight size={24} />
                 </button>
               </div>
