@@ -1,9 +1,10 @@
 // src/pages/Home.jsx
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import FlockLogo from "../components/SVGs/logos/FlockLogo";
 import { ArrowUpRight } from "lucide-react";
 import "../App.css";
+import "../components/Chatbot/Chatbot.css";
 import PabloWave from "../components/SVGs/Pablo/PabloWave";
 import { useChatState } from "../components/Chatbot/hooks/useChatState";
 import {
@@ -16,6 +17,7 @@ import {
 } from "../components/Chatbot/utils/eventUtils";
 import bgBlob from "../assets/images/background-image.png"; // make sure this path is correct
 import EventSummaryCard from "../components/EventSummaryCard";
+import { formatDateDisplay } from '../utils/dateUtils';
 
 function Home() {
   // Initialize chat state with the useChatState hook
@@ -167,17 +169,13 @@ function Home() {
   // Format date range for display
   const getFormattedDateRange = () => {
     if (!eventInfo.dateRange) return "";
-
-    // Handle if dateRange is an object with start and end properties
     if (
       typeof eventInfo.dateRange === "object" &&
       eventInfo.dateRange.start &&
       eventInfo.dateRange.end
     ) {
-      return `${eventInfo.dateRange.start} - ${eventInfo.dateRange.end}`;
+      return `${formatDateDisplay(eventInfo.dateRange.start)} - ${formatDateDisplay(eventInfo.dateRange.end)}`;
     }
-
-    // Handle if dateRange is already a string
     return eventInfo.dateRange;
   };
 
@@ -198,13 +196,20 @@ function Home() {
     return eventInfo.timesThatWork;
   };
 
+  // Find the latest bot message with an eventId
+  const joinEventMessage = useMemo(() => {
+    return messages
+      .filter((msg) => msg.sender === "bot" && msg.eventId)
+      .slice(-1)[0];
+  }, [messages]);
+
   return (
     <div className="relative flex flex-col min-h-screen overflow-hidden bg-surface dark:bg-surface-dark">
       {/* ——— the blob behind everything ——— */}
       <div style={blobStyle} aria-hidden="true" />
 
       {/* ——— your hero content ——— */}
-      <main className="relative z-0 flex flex-col items-center justify-center flex-1 px-6 -mt-20">
+      <main className="relative z-0 flex flex-col items-center justify-center flex-1 px-6 -mt-10">
         <div className="flex flex-col items-center gap-9">
           {/* Show hero only if no user questions yet */}
           {!hasAskedQuestion ? (
@@ -251,72 +256,51 @@ function Home() {
             </>
           ) : (
             // Chat area replaces hero when user has asked a question
-            <div className="w-full max-w-xl min-w-[850px] mx-auto flex flex-col flex-1 h-[70vh] relative overflow-hidden">
-              <div className="flex flex-col flex-1 gap-2 pb-32 overflow-y-auto bg-transparent">
+            <div className="w-full max-w-xl min-w-[850px] mx-auto flex flex-col h-[70vh] relative">
+              <div className="flex flex-col flex-1 h-0 gap-4 overflow-y-auto bg-transparent">
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`rounded-xl px-4 py-2 max-w-[80%] text-base whitespace-pre-line ${
-                      msg.sender === "user"
-                        ? "self-end bg-primary text-onPrimary"
-                        : "self-start bg-surfaceContainer dark:bg-surfaceContainer-dark text-onSurface dark:text-onSurface-dark border border-border dark:border-border-dark"
-                    }`}
+                    className={`max-w-[70%] min-w-[50px] px-3 py-3 rounded-[20px] whitespace-pre-line text-base font-medium
+                      ${msg.sender === "user"
+                        ? "self-end bg-surfaceContainer border border-border dark:border-border-dark dark:bg-surfaceContainer-dark text-onSurface dark:text-onSurface-dark"
+                        : "self-start  text-onSurface"}
+                    `}
                   >
                     {msg.text}
-
-                    {/* Show Join button if the message has an eventId */}
-                    {msg.eventId && (
-                      <div className="mt-3">
-                        <button
-                          onClick={() =>
-                            (window.location.href = `/event/${msg.eventId}`)
-                          }
-                          className="flex items-center justify-center w-full px-4 py-3 font-medium text-center uppercase transition-colors rounded-full cursor-pointer bg-primary dark:bg-primary-dark text-onPrimary dark:text-onPrimary-dark hover:bg-primary/90 active:bg-primary/80"
-                        >
-                          <span className="mr-1">JOIN EVENT</span>
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M7 17L17 7M17 7H7M17 7V17"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    )}
                   </div>
                 ))}
-
-                {/* Show event summary card when all required info is available */}
-                {showCard && hasRequiredInfo(eventInfo) && (
-                  <div className="self-start w-full max-w-sm my-4 ml-4">
-                    <EventSummaryCard
-                      title={eventInfo.name || "Your Event"}
-                      dateRange={getFormattedDateRange()}
-                      timeRange={getFormattedTimeRange()}
-                      onCreateClick={handleCreateEvent}
-                    />
-                  </div>
-                )}
-
                 <div ref={messagesEndRef} />
               </div>
+              {/* Confirmation card and button */}
+              {showCard && (
+                <div className="flex flex-col items-start w-full my-4">
+                  <EventSummaryCard eventInfo={eventInfo} onCreate={handleCreateEvent} />
+                </div>
+              )}
+              {joinEventMessage && (
+                <div className="flex flex-col items-start w-full my-4">
+                  <div className="bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-xl p-4 border border-border dark:border-border-dark shadow">
+                    <div className="mb-2 font-semibold text-lg text-onSurface dark:text-onSurface-dark">
+                      {joinEventMessage.text}
+                    </div>
+                    <button
+                      onClick={() => window.location.href = `/event/${joinEventMessage.eventId}`}
+                      className="px-6 py-2 bg-primary text-white rounded-xl shadow font-bold hover:bg-primary-dark transition"
+                    >
+                      Join Event
+                    </button>
+                  </div>
+                </div>
+              )}
               {/* Chat input at the bottom */}
-              <div className="flex flex-col w-full gap-2 p-2 border bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark rounded-2xl focus-within:ring-1 focus-within:border-onSurface dark:focus-within:border-onSurface-dark mt-2 fixed bottom-8 left-1/2 -translate-x-1/2 max-w-xl min-w-[350px] z-20">
+              <div className="fixed z-20 flex flex-col w-full gap-1 p-2 mt-2 -translate-x-1/2 border bg-surfaceContainer dark:bg-surfaceContainer-dark max-w-[40%] border-border dark:border-border-dark rounded-2xl focus-within:ring-1 focus-within:border-onSurface dark:focus-within:border-onSurface-dark bottom-8 left-1/2">
                 <textarea
                   ref={textareaRef}
                   value={inputText || ""}
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="w-full overflow-y-auto custom-scrollbar bg-surfaceContainer dark:bg-surfaceContainer-dark p-2 text-onSurface resize-none focus:outline-none max-h-[100px]"
+                  className="w-full overflow-y-auto custom-scrollbar bg-surfaceContainer dark:bg-surfaceContainer-dark p-2 text-onSurface resize-none focus:outline-none max-h-[50px]"
                   rows={2}
                   placeholder="Describe the event you are trying to schedule or copy and paste your code!"
                 />

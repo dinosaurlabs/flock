@@ -14,17 +14,13 @@ export async function createEvent(eventData) {
         ? eventData.date_range
         : JSON.stringify(eventData.date_range);
 
-    const times_that_work = Array.isArray(eventData.times_that_work)
-      ? JSON.stringify(eventData.times_that_work)
-      : eventData.times_that_work || "[]";
-
     const formattedData = {
       id: eventData.id,
       name: eventData.name,
       description: eventData.description,
       date_range: date_range,
       allow_anonymous: Boolean(eventData.allow_anonymous),
-      times_that_work: times_that_work,
+      times: eventData.times,
     };
 
     // Log the formatted data for debugging

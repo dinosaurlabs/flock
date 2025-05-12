@@ -25,6 +25,9 @@ ${!eventInfo.name ? "- Event name" : ""}
 ${!eventInfo.dateRange ? "- Date range" : ""}
 ${!eventInfo.timesThatWork ? "- Preferred times" : ""}
 
+IMPORTANT:
+- If the user does not specify a time range, default to including all possible times (e.g., 12 AM to 11 PM) for each day in the date range.
+
 RESPONSE FORMAT:
 {
   "message": "Your response to the user",

@@ -146,6 +146,31 @@ export async function processMessage(userMessage, state, onEventCreated) {
   }
 }
 
+// Helper to parse hour strings like '8 AM', '5 PM', '08:00', '8'
+function parseHourString(str) {
+  str = str.trim();
+  // Handle '8 AM', '5 PM'
+  const ampmMatch = str.match(/^([0-9]{1,2})(?:\s*(:[0-9]{2}))?\s*(AM|PM)$/i);
+  if (ampmMatch) {
+    let hour = parseInt(ampmMatch[1], 10);
+    const isPM = ampmMatch[3].toUpperCase() === 'PM';
+    if (isPM && hour !== 12) hour += 12;
+    if (!isPM && hour === 12) hour = 0;
+    return hour;
+  }
+  // Handle '08:00'
+  if (str.includes(':')) {
+    return parseInt(str.split(':')[0], 10);
+  }
+  // Handle '8'
+  return parseInt(str, 10);
+}
+
+// Helper to pad numbers
+function pad(n) {
+  return n.toString().padStart(2, '0');
+}
+
 /**
  * Create an event from the collected information
  * @param {Object} eventInfo - Event information
@@ -160,7 +185,33 @@ export async function createEventFromInfo(
   onEventCreated,
   currentDate = new Date()
 ) {
-  console.log("Creating event with reference date:", currentDate.toISOString());
+  console.log("eventInfo before createEvent:", eventInfo);
+
+  // Ensure times is a non-empty array
+  let times = eventInfo.times;
+  if (!Array.isArray(times) || !times.length) {
+    // If timesThatWork is missing, null, or 'Flexible timing', default to full day
+    let timeRange = eventInfo.timesThatWork;
+    if (
+      !timeRange ||
+      typeof timeRange !== "string" ||
+      timeRange.toLowerCase().includes("flexible")
+    ) {
+      timeRange = "0:00 - 24:00"; // full day
+    }
+    if (
+      eventInfo.dateRange &&
+      eventInfo.dateRange.start &&
+      eventInfo.dateRange.end
+    ) {
+      times = generateTimesArray(eventInfo.dateRange, timeRange);
+    }
+  }
+  if (!Array.isArray(times) || !times.length) {
+    console.error("No times array found in eventInfo!", eventInfo);
+    addBotMessage("No valid times found for this event. Please try again.");
+    return;
+  }
 
   const eventId = generateEventId();
   // Map the fields to match Supabase schema
@@ -171,7 +222,7 @@ export async function createEventFromInfo(
     date_range: eventInfo.dateRange, // Mapping dateRange to date_range
     allow_anonymous:
       eventInfo.allowAnonymous === null ? false : eventInfo.allowAnonymous, // Mapping allowAnonymous to allow_anonymous
-    times_that_work: eventInfo.timesThatWork, // Mapping timesThatWork to times_that_work
+    times, // This is now guaranteed to be an array
   };
 
   // Log the event data for debugging
@@ -204,4 +255,41 @@ export async function createEventFromInfo(
     );
     return { success: false, error };
   }
+}
+
+function generateTimesArray(dateRange, timeRange) {
+  if (
+    !dateRange ||
+    !timeRange ||
+    typeof timeRange !== "string" ||
+    timeRange.toLowerCase().includes("flexible")
+  ) {
+    console.error("Invalid or flexible timeRange for generateTimesArray:", timeRange);
+    // Prompt user for a specific time range
+    return null; // Use null to indicate special handling
+  }
+  // Accept both " - " and " to " as separators
+  let parts = timeRange.split(" - ");
+  if (parts.length !== 2) {
+    parts = timeRange.split(" to ");
+  }
+  if (parts.length !== 2) {
+    console.error("Unrecognized timeRange format:", timeRange);
+    return [];
+  }
+  const [startHour, endHour] = parts;
+  const startH = parseHourString(startHour);
+  const endH = parseHourString(endHour);
+  const result = [];
+  let current = new Date(dateRange.start);
+  const last = new Date(dateRange.end);
+  while (current <= last) {
+    for (let hour = startH; hour < endH; hour++) {
+      // Store as local ISO string (no Z, no UTC conversion)
+      const iso = `${current.getFullYear()}-${pad(current.getMonth() + 1)}-${pad(current.getDate())}T${pad(hour)}:00:00`;
+      result.push(iso);
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return result;
 }

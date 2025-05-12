@@ -33,8 +33,32 @@ const CreateFlock = () => {
     };
   }, []);
 
+  const generateTimesThatWork = (dates, startTime, endTime, hourAvailability) => {
+    const result = [];
+    if (!dates.length) return result;
+    dates.forEach(dateStr => {
+      if (hourAvailability) {
+        // 24 hour: 0 to 23
+        for (let hour = 0; hour < 24; hour++) {
+          const iso = new Date(`${dateStr}T${hour.toString().padStart(2, '0')}:00:00Z`).toISOString();
+          result.push(iso);
+        }
+      } else if (startTime && endTime) {
+        // e.g. startTime = '00:00', endTime = '03:00' for 12am-3am
+        const startHour = parseInt(startTime.split(':')[0], 10);
+        const endHour = parseInt(endTime.split(':')[0], 10);
+        for (let hour = startHour; hour < endHour; hour++) {
+          const iso = new Date(`${dateStr}T${hour.toString().padStart(2, '0')}:00:00Z`).toISOString();
+          result.push(iso);
+        }
+      }
+    });
+    return result;
+  };
+
   const handleSubmitFlockName = (e) => {
     e.preventDefault();
+    const timesThatWork = generateTimesThatWork(selectedDates, startTime, endTime, hourAvailability);
     console.log({
       flockName,
       flockDescription,
@@ -44,8 +68,8 @@ const CreateFlock = () => {
       hourAvailability,
       selectedDates,
       participantsCount,
+      times: timesThatWork,
     });
-
     // In a real app, you would save the flock and navigate to the next page
     alert("Flock created successfully!");
     // Navigate to a success page or back to home

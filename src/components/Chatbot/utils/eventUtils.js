@@ -14,7 +14,7 @@ export const REQUIRED_INFO = {
   description: null,
   dateRange: null,
   allowAnonymous: null,
-  timesThatWork: null,
+  times: null,
 };
 
 /**

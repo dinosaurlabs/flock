@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import Typography from "../components/Typography/Typography";
 import Button from "../components/Button/Button";
 import { supabase } from "../supabaseClient";
+import { parseDateUTC, formatDateShort } from '../utils/dateUtils';
+import bgBlob from "../assets/images/background-image.png";
 
 const HOURS = [
   "8 AM",
@@ -27,8 +29,8 @@ function getDatesInRange(start, end) {
   }
 
   const dates = [];
-  let current = new Date(start);
-  const last = new Date(end);
+  let current = parseDateUTC(start);
+  const last = parseDateUTC(end);
 
   // Handle invalid date parsing
   if (isNaN(current.getTime()) || isNaN(last.getTime())) {
@@ -46,7 +48,7 @@ function getDatesInRange(start, end) {
 
   while (current <= last) {
     dates.push(new Date(current));
-    current.setDate(current.getDate() + 1);
+    current.setUTCDate(current.getUTCDate() + 1);
   }
   return dates;
 }
@@ -55,6 +57,33 @@ function getAccessCode(id) {
   // Simple deterministic code for demo
   return id.slice(0, 6).toUpperCase();
 }
+
+// Utility for formatting time in AM/PM
+function formatTimeAMPM(iso) {
+  const d = new Date(iso);
+  return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
+// Helper to pad numbers
+function pad(n) {
+  return n.toString().padStart(2, '0');
+}
+
+const blobStyle = {
+  position: "absolute",
+  top: "0%",
+  left: "0%",
+  width: "100%",
+  height: "100%",
+  opacity: 0.5,
+  backgroundImage: `url(${bgBlob})`,
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "center bottom",
+  backgroundSize: "contain",
+  pointerEvents: "none",
+  userSelect: "none",
+  zIndex: 0,
+};
 
 const EventPage = () => {
   const { id } = useParams();
@@ -65,6 +94,9 @@ const EventPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [responses, setResponses] = useState([]);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragMode, setDragMode] = useState(null); // 'select' or 'deselect'
+  const [editMode, setEditMode] = useState(false);
 
   // Load user's previous response from localStorage
   useEffect(() => {
@@ -86,16 +118,15 @@ const EventPage = () => {
   }, [id]);
 
   // Calculate availability counts for heat map
-  const getSlotInfo = (date, hourIdx) => {
-    const key = `${date.toISOString().split("T")[0]}_${hourIdx}`;
+  const getSlotInfo = (iso) => {
+    if (!iso) return { count: 0, users: [], percentage: 0 };
     const availableUsers = responses.filter(
-      (resp) => resp.availability && resp.availability.includes(key)
+      (resp) => resp.availability && resp.availability.includes(iso)
     );
     return {
       count: availableUsers.length,
       users: availableUsers.map((u) => u.name),
-      percentage:
-        responses.length > 0 ? availableUsers.length / responses.length : 0,
+      percentage: responses.length > 0 ? availableUsers.length / responses.length : 0,
     };
   };
 
@@ -133,16 +164,16 @@ const EventPage = () => {
           }
         }
 
-        // Parse times_that_work from JSON string if it's a string
+        // Parse times from JSON string if it's a string
         if (
-          eventData.times_that_work &&
-          typeof eventData.times_that_work === "string"
+          eventData.times &&
+          typeof eventData.times === "string"
         ) {
           try {
-            eventData.times_that_work = JSON.parse(eventData.times_that_work);
+            eventData.times = JSON.parse(eventData.times);
           } catch (e) {
-            console.error("Error parsing times_that_work:", e);
-            eventData.times_that_work = [];
+            console.error("Error parsing times:", e);
+            eventData.times = [];
           }
         }
       }
@@ -197,6 +228,15 @@ const EventPage = () => {
     };
   }, [id]);
 
+  useEffect(() => {
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      setDragMode(null);
+    };
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => window.removeEventListener('mouseup', handleMouseUp);
+  }, []);
+
   const handleCopyCode = async () => {
     const code = getAccessCode(id);
     try {
@@ -212,15 +252,43 @@ const EventPage = () => {
     return <div className="p-8">Event not found.</div>;
   }
 
-  const allDates = getDatesInRange(
-    event.date_range.start,
-    event.date_range.end
-  );
-  const weekDates = allDates.slice(weekStartIdx, weekStartIdx + 7);
+  // If event.times is null or empty, generate 24-hour times for the date range
+  let eventTimes = event.times;
+  if (!Array.isArray(eventTimes) || !eventTimes.length) {
+    if (event.date_range && event.date_range.start && event.date_range.end) {
+      eventTimes = [];
+      let current = parseDateUTC(event.date_range.start);
+      const last = parseDateUTC(event.date_range.end);
+      while (current <= last) {
+        for (let hour = 0; hour < 24; hour++) {
+          const iso = `${current.getUTCFullYear()}-${pad(current.getUTCMonth()+1)}-${pad(current.getUTCDate())}T${pad(hour)}:00:00`;
+          eventTimes.push(iso);
+        }
+        current.setUTCDate(current.getUTCDate() + 1);
+      }
+    } else {
+      eventTimes = [];
+    }
+  }
 
-  const handleCellClick = (date, hourIdx) => {
-    const key = `${date.toISOString().split("T")[0]}_${hourIdx}`;
-    setSelected((prev) => ({ ...prev, [key]: !prev[key] }));
+  // Group times by date
+  const timesByDate = (eventTimes || []).reduce((acc, iso) => {
+    const [date, time] = iso.split('T');
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(iso);
+    return acc;
+  }, {});
+  const allDates = Object.keys(timesByDate).sort();
+  // Get all unique times (HH:MM) across all dates
+  const allTimes = Array.from(new Set(Object.values(timesByDate).flat().map(iso => iso.split('T')[1].slice(0,5)))).sort();
+  const getTimeLabel = (iso) => {
+    return formatTimeAMPM(iso);
+  };
+
+  // Selection and slot info use ISO string as key
+  const handleCellClick = (iso) => {
+    if (!iso) return;
+    setSelected((prev) => ({ ...prev, [iso]: !prev[iso] }));
   };
 
   const handleSave = async () => {
@@ -229,29 +297,63 @@ const EventPage = () => {
       .filter(([_, v]) => v)
       .map(([k]) => k);
 
-    // Save to Supabase
-    const { error } = await supabase.from("responses").insert([
-      {
-        event_id: id,
-        name,
-        availability,
-      },
-    ]);
+    // Check if a response from this user already exists
+    const { data: existing, error: fetchError } = await supabase
+      .from("responses")
+      .select("id")
+      .eq("event_id", id)
+      .eq("name", name)
+      .single();
 
-    if (!error) {
-      setSubmitted(true);
-      // Save to localStorage
-      localStorage.setItem(
-        `event_response_${id}`,
-        JSON.stringify({
+    if (existing && existing.id) {
+      // Update existing response
+      const { error } = await supabase
+        .from("responses")
+        .update({ availability })
+        .eq("id", existing.id);
+      if (!error) {
+        setSubmitted(true);
+        setEditMode(false);
+        setSelected(availability.reduce((acc, key) => ({ ...acc, [key]: true }), {}));
+        localStorage.setItem(
+          `event_response_${id}`,
+          JSON.stringify({
+            name,
+            availability,
+            submitted: true,
+            timestamp: new Date().toISOString(),
+          })
+        );
+        fetchResponses();
+      } else {
+        alert("Error updating response!");
+      }
+    } else {
+      // Insert new response
+      const { error } = await supabase.from("responses").insert([
+        {
+          event_id: id,
           name,
           availability,
-          submitted: true,
-          timestamp: new Date().toISOString(),
-        })
-      );
-    } else {
-      alert("Error saving response!");
+        },
+      ]);
+      if (!error) {
+        setSubmitted(true);
+        setEditMode(false);
+        setSelected(availability.reduce((acc, key) => ({ ...acc, [key]: true }), {}));
+        localStorage.setItem(
+          `event_response_${id}`,
+          JSON.stringify({
+            name,
+            availability,
+            submitted: true,
+            timestamp: new Date().toISOString(),
+          })
+        );
+        fetchResponses();
+      } else {
+        alert("Error saving response!");
+      }
     }
   };
 
@@ -271,235 +373,169 @@ const EventPage = () => {
     setWeekStartIdx((idx) => Math.min(allDates.length - 7, idx + 7));
   };
 
+  const fetchResponses = async () => {
+    const { data: respData } = await supabase
+      .from("responses")
+      .select("*")
+      .eq("event_id", id)
+      .order("created_at", { ascending: true });
+    setResponses(respData || []);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f6f8fa] py-12">
-      <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-lg p-8 w-full max-w-3xl border border-[#e5e7eb] flex flex-col gap-6">
-        <div className="flex justify-between items-center mb-2">
-          <Typography textStyle="display-md" color="primary-light">
-            Join {event.name || "Event"}
-          </Typography>
-          <Button
-            text={copySuccess ? "Copied!" : "Copy Access Code"}
-            buttonSize="sm"
-            onClick={handleCopyCode}
-            className={`${
-              copySuccess
-                ? "bg-green-500 hover:bg-green-600"
-                : "bg-blue-500 hover:bg-blue-600"
-            } text-white transition-colors duration-200`}
-          />
-        </div>
-        <Typography textStyle="body-lg" className="mb-2">
-          {allDates && allDates.length > 0 ? (
-            <>
-              {allDates[0].toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-              })}
-              {" - "}
-              {allDates[allDates.length - 1].toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-              })}
-            </>
-          ) : (
-            "Date range not available"
-          )}
-        </Typography>
-        <div className="mb-2">
-          <div className="flex justify-between items-center">
-            <label className="block font-semibold mb-1">Name:</label>
-            {submitted && (
-              <Button
-                text="Clear Response"
-                buttonSize="sm"
-                onClick={handleClearResponse}
-                className="text-red-500 hover:text-red-600"
-              />
-            )}
+    <div className="relative flex flex-col min-h-screen overflow-hidden bg-surface dark:bg-surface-dark">
+      <div style={blobStyle} aria-hidden="true" />
+      <div className="absolute inset-0 z-10 flex items-center justify-center min-h-screen select-none">
+        <div className="bg-[#232324] rounded-2xl shadow-lg p-8 w-full max-w-3xl border border-border dark:border-border-dark flex flex-col gap-6">
+          <div className="flex items-center justify-between mb-2">
+            <Typography textStyle="display-md" color="primary-light">
+              Join {event.name || "Event"}
+            </Typography>
+            <Button
+              text={copySuccess ? "Copied!" : "Copy Access Code"}
+              buttonSize="sm"
+              onClick={handleCopyCode}
+              className={`${
+                copySuccess
+                  ? "bg-green-500 hover:bg-green-600"
+                  : "bg-blue-500 hover:bg-blue-600"
+              } text-white transition-colors duration-200`}
+            />
           </div>
-          <input
-            className="w-full p-3 rounded-md border border-[#e5e7eb] bg-[#f6f8fa] dark:bg-surfaceContainer-dark"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your name"
-            disabled={submitted}
-          />
-        </div>
-        <div className="mb-2">
-          <label className="block font-semibold mb-1">
-            Select Availability:
-          </label>
-          <div className="flex items-center gap-2 mb-2">
-            <Button
-              text="<"
-              buttonSize="sm"
-              onClick={handlePrevWeek}
-              disabled={
-                weekStartIdx === 0 || !weekDates || weekDates.length === 0
-              }
-            />
-            <span className="font-semibold">
-              {weekDates && weekDates.length > 0 ? (
-                <>
-                  {weekDates[0].toLocaleString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                  {" - "}
-                  {weekDates[weekDates.length - 1].toLocaleString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </>
-              ) : (
-                "Week not available"
+          <Typography textStyle="body-lg" className="mb-2">
+            {event.date_range && event.date_range.start && event.date_range.end
+              ? `${formatDateShort(event.date_range.start)} - ${formatDateShort(event.date_range.end)}`
+              : "Date range not available"}
+          </Typography>
+          <div className="mb-2">
+            <div className="flex items-center justify-between">
+              <label className="block mb-1 font-semibold">Name:</label>
+              {submitted && (
+                null
               )}
-            </span>
-            <Button
-              text=">"
-              buttonSize="sm"
-              onClick={handleNextWeek}
-              disabled={
-                !weekDates ||
-                weekDates.length === 0 ||
-                weekStartIdx + 7 >= allDates.length
-              }
-            />
-            <span className="ml-auto text-blue-500 cursor-pointer hover:underline">
-              + Add Google Calendar
-            </span>
-            <Button
-              text="SAVE AVAILABILITY"
-              buttonSize="sm"
-              onClick={handleSave}
-              className="bg-blue-500 text-white"
+            </div>
+            <input
+              className="w-full p-3 rounded-md border border-[#e5e7eb] bg-[#f6f8fa] dark:bg-surfaceContainer-dark"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
               disabled={submitted}
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr>
-                  <th className="w-20"></th>
-                  {weekDates && weekDates.length > 0 ? (
-                    weekDates.map((date) => (
-                      <th
-                        key={date.toISOString()}
-                        className="text-center px-2 pb-2 font-semibold"
-                      >
-                        <div>
-                          {date.toLocaleString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {date
-                            .toLocaleString("en-US", { weekday: "short" })
-                            .toUpperCase()}
-                        </div>
+          <div className="mb-2">
+            <label className="block mb-1 font-semibold">
+              Save Availability:
+            </label>
+            <div className="flex items-center gap-2 mb-2">
+              <Button
+                text="<"
+                buttonSize="sm"
+                onClick={handlePrevWeek}
+                disabled={
+                  weekStartIdx === 0 || !allDates || allDates.length === 0
+                }
+              />
+              <span className="font-semibold">
+                {event.date_range && event.date_range.start && event.date_range.end
+                  ? `${formatDateShort(event.date_range.start)} - ${formatDateShort(event.date_range.end)}`
+                  : "Week not available"}
+              </span>
+              <Button
+                text=">"
+                buttonSize="sm"
+                onClick={handleNextWeek}
+                disabled={
+                  !allDates ||
+                  allDates.length === 0 ||
+                  weekStartIdx + 7 >= allDates.length
+                }
+              />
+              <span className="ml-auto text-blue-500 cursor-pointer hover:underline">
+                + Add Google Calendar
+              </span>
+              <Button
+                text={
+                  !submitted ? "SAVE" : editMode ? "SAVE" : "EDIT"
+                }
+                buttonSize="sm"
+                onClick={() => {
+                  if (!submitted) {
+                    handleSave();
+                  } else if (!editMode) {
+                    setTimeout(() => setEditMode(true), 0);
+                  } else {
+                    handleSave();
+                  }
+                }}
+                className="text-white bg-blue-500"
+              />
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    <th className="w-8"></th>
+                    {allDates.map(date => (
+                      <th key={date} className="px-2 pb-2 font-semibold text-center">
+                        <div>{formatDateShort(date)}</div>
+                        <div className="text-xs text-gray-500">{new Date(date).toLocaleDateString('en-US', { weekday: "short" }).toUpperCase()}</div>
                       </th>
-                    ))
-                  ) : (
-                    <th className="text-center px-2 pb-2">
-                      No dates available
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {HOURS.map((hour, hourIdx) => (
-                  <tr key={hour}>
-                    <td className="text-right pr-2 text-sm text-gray-500 font-medium">
-                      {hour}
-                    </td>
-                    {weekDates && weekDates.length > 0 ? (
-                      weekDates.map((date) => {
-                        const key = `${
-                          date.toISOString().split("T")[0]
-                        }_${hourIdx}`;
-                        const slotInfo = getSlotInfo(date, hourIdx);
-                        const tooltipText =
-                          slotInfo.users.length > 0
-                            ? `Available: ${slotInfo.users.join(", ")}`
-                            : "No one available";
-
-                        return (
-                          <td
-                            key={key}
-                            className={`border border-[#e5e7eb] w-12 h-8 cursor-pointer relative group
-                              ${
-                                submitted
-                                  ? getHeatMapColor(slotInfo.percentage)
-                                  : selected[key]
-                                  ? "bg-blue-200"
-                                  : "bg-white dark:bg-surfaceContainer-dark"
-                              }`}
-                            onClick={() =>
-                              !submitted && handleCellClick(date, hourIdx)
-                            }
-                          >
-                            {submitted && slotInfo.count > 0 && (
-                              <span className="absolute text-xs text-center w-full">
-                                {slotInfo.count}
-                              </span>
-                            )}
-                            <div className="hidden group-hover:block absolute z-10 bg-gray-800 text-white text-xs rounded py-1 px-2 left-1/2 transform -translate-x-1/2 -top-8 whitespace-nowrap">
-                              {tooltipText}
-                            </div>
-                          </td>
-                        );
-                      })
-                    ) : (
-                      <td className="text-center border border-[#e5e7eb]">-</td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="mt-8">
-          <Typography textStyle="heading-md">Group Availability</Typography>
-          {responses.length === 0 ? (
-            <Typography textStyle="body-md" color="secondary">
-              No responses yet.
-            </Typography>
-          ) : (
-            <table className="w-full mt-4 border-collapse">
-              <thead>
-                <tr>
-                  <th className="border-b p-2 text-left">Name</th>
-                  {allDates.map((date) => (
-                    <th key={date} className="border-b p-2 text-center">
-                      {date.toLocaleString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {responses.map((resp, idx) => (
-                  <tr key={idx}>
-                    <td className="border-b p-2">{resp.name}</td>
-                    {allDates.map((date) => (
-                      <td key={date} className="border-b p-2 text-center">
-                        {resp.availability &&
-                        resp.availability.some((slot) =>
-                          slot.startsWith(date.toISOString().split("T")[0])
-                        )
-                          ? "✅"
-                          : ""}
-                      </td>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody>
+                  {allTimes.map(time => (
+                    <tr className="rounded-2xl" key={time}>
+                      <td className="pr-2 text-sm font-medium text-right text-gray-500 rounded-2xl">{formatTimeAMPM(`2020-01-01T${time}`)}</td>
+                      {allDates.map(date => {
+                        // Find the ISO string for this date/time
+                        const iso = (timesByDate[date] || []).find(iso => iso.split('T')[1].slice(0,5) === time);
+                        const key = iso;
+                        const slotInfo = getSlotInfo(iso);
+                        const tooltipText = slotInfo.users.length > 0
+                              ? `Available: ${slotInfo.users.join(", ")}`
+                              : "No one available";
+                          return (
+                            <td
+                            key={date + time}
+                              className={`border border-border dark:border-border-dark w-12 h-8 cursor-pointer relative group
+                              ${(!submitted || editMode)
+                                ? (selected[key] ? "bg-blue-200" : "bg-white dark:bg-surfaceContainer-dark")
+                                : getHeatMapColor(slotInfo.percentage)
+                              }`}
+                            onMouseDown={() => {
+                              if (submitted && !editMode) return;
+                              setIsDragging(true);
+                              setDragMode(selected[key] ? 'deselect' : 'select');
+                              setSelected((prev) => ({
+                                ...prev,
+                                [key]: !selected[key],
+                              }));
+                            }}
+                            onMouseEnter={() => {
+                              if (!isDragging || (submitted && !editMode)) return;
+                              setSelected((prev) => ({
+                                ...prev,
+                                [key]: dragMode === 'select' ? true : false,
+                              }));
+                            }}
+                            onMouseUp={() => {
+                              setIsDragging(false);
+                              setDragMode(null);
+                            }}
+                            >
+                              <div className="absolute z-10 hidden px-2 py-1 text-xs text-white transform -translate-x-1/2 bg-gray-800 rounded group-hover:block left-1/2 -top-8 whitespace-nowrap">
+                                {tooltipText}
+                              </div>
+                            </td>
+                          );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ function Button({
   return (
     <button
       type={type}
-      className={`flex items-center rounded-full ${buttonSize} ${color} ${className}`}
+      className={`flex items-center justify-center rounded-full ${buttonSize} ${color} ${className}`}
       onClick={onClick}
     >
       <Typography textStyle={`label-${buttonSize}`}>{text}</Typography>
