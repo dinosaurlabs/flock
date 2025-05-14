@@ -4,9 +4,10 @@ const plugin = require("tailwindcss/plugin");
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-
+    "./public/index.html",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {

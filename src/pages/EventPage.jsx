@@ -335,7 +335,7 @@ const EventPage = () => {
     <div className="relative flex flex-col min-h-screen overflow-hidden bg-surface dark:bg-surface-dark">
       <div style={blobStyle} aria-hidden="true" />
       <div className="absolute inset-0 z-10 flex items-center justify-center min-h-screen select-none">
-        <div className="flex flex-col w-full max-w-3xl gap-6 p-8 border shadow-lg bg-surfaceContainer dark:bg-surfaceContainer rounded-2xl border-border dark:border-border-dark">
+        <div className="flex flex-col w-full max-w-3xl gap-6 p-8 border shadow-lg bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-2xl border-border dark:border-border-dark">
           <div className="flex items-center justify-between mb-2">
             <Typography textStyle="display-md" color="primary-light">
               Join {event.name || "Event"}
