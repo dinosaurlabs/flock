@@ -335,7 +335,7 @@ const EventPage = () => {
     <div className="relative flex flex-col min-h-screen overflow-hidden bg-surface dark:bg-surface-dark">
       <div style={blobStyle} aria-hidden="true" />
       <div className="absolute inset-0 z-10 flex items-center justify-center min-h-screen select-none">
-        <div className="bg-[#232324] rounded-2xl shadow-lg p-8 w-full max-w-3xl border border-border dark:border-border-dark flex flex-col gap-6">
+        <div className="flex flex-col w-full max-w-3xl gap-6 p-8 border shadow-lg bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-2xl border-border dark:border-border-dark"
           <div className="flex items-center justify-between mb-2">
             <Typography textStyle="display-md" color="primary-light">
               Join {event.name || "Event"}
@@ -348,10 +348,10 @@ const EventPage = () => {
                 copySuccess
                   ? "bg-green-500 hover:bg-green-600"
                   : "bg-blue-500 hover:bg-blue-600"
-              } text-white transition-colors duration-200`}
+              } text-onPrimary dark:text-onPrimary-dark transition-colors duration-200`}
             />
           </div>
-          <Typography textStyle="body-lg" className="mb-2">
+          <Typography textStyle="body-lg" className="mb-2 text-onSurface dark:text-onSurface-dark">
             {event.date_range && event.date_range.start && event.date_range.end
               ? `${formatDateShort(event.date_range.start)} - ${formatDateShort(
                   event.date_range.end
@@ -360,11 +360,11 @@ const EventPage = () => {
           </Typography>
           <div className="mb-2">
             <div className="flex items-center justify-between">
-              <label className="block mb-1 font-semibold">Name:</label>
+              <label className="block mb-1 font-semibold text-onSurface dark:text-onSurface-dark">Name:</label>
               {submitted && null}
             </div>
             <input
-              className="w-full p-3 rounded-md border border-[#e5e7eb] bg-[#f6f8fa] dark:bg-surfaceContainer-dark"
+              className="w-full p-3 border rounded-md border-border dark:border-border-dark bg-surfaceContainer dark:bg-surfaceContainer-dark text-onSurface dark:text-onSurface-dark"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
@@ -372,7 +372,7 @@ const EventPage = () => {
             />
           </div>
           <div className="mb-2">
-            <label className="block mb-1 font-semibold">
+            <label className="block mb-1 font-semibold text-onSurface dark:text-onSurface-dark">
               Save Availability:
             </label>
             <div className="flex items-center gap-2 mb-2">
@@ -384,7 +384,7 @@ const EventPage = () => {
                   weekStartIdx === 0 || !allDates || allDates.length === 0
                 }
               />
-              <span className="font-semibold">
+              <span className="font-semibold text-onSurface dark:text-onSurface-dark">
                 {event.date_range &&
                 event.date_range.start &&
                 event.date_range.end
@@ -403,7 +403,7 @@ const EventPage = () => {
                   weekStartIdx + 7 >= allDates.length
                 }
               />
-              <span className="ml-auto text-blue-500 cursor-pointer hover:underline">
+              <span className="ml-auto cursor-pointer text-primary dark:text-primary-dark hover:underline">
                 + Add Google Calendar
               </span>
               <Button
@@ -418,7 +418,7 @@ const EventPage = () => {
                     handleSave();
                   }
                 }}
-                className="text-white bg-blue-500"
+                className="text-onPrimary dark:text-onPrimary-dark bg-primary dark:bg-primary-dark"
               />
             </div>
             <div className="overflow-x-auto">
@@ -429,10 +429,10 @@ const EventPage = () => {
                     {allDates.map((date) => (
                       <th
                         key={date}
-                        className="px-2 pb-2 font-semibold text-center"
+                        className="px-2 pb-2 font-semibold text-center text-onSurface dark:text-onSurface-dark"
                       >
                         <div>{formatDateShort(date)}</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-secondary dark:text-secondary-dark">
                           {new Date(date)
                             .toLocaleDateString("en-US", { weekday: "short" })
                             .toUpperCase()}
@@ -444,7 +444,7 @@ const EventPage = () => {
                 <tbody>
                   {allTimes.map((time) => (
                     <tr className="rounded-2xl" key={time}>
-                      <td className="pr-2 text-sm font-medium text-right text-gray-500 rounded-2xl">
+                      <td className="pr-2 text-sm font-medium text-right text-secondary dark:text-secondary-dark rounded-2xl">
                         {formatTimeAMPM(`2020-01-01T${time}`)}
                       </td>
                       {allDates.map((date) => {
@@ -493,7 +493,7 @@ const EventPage = () => {
                               setDragMode(null);
                             }}
                           >
-                            <div className="absolute z-10 hidden px-2 py-1 text-xs text-white transform -translate-x-1/2 bg-gray-800 rounded group-hover:block left-1/2 -top-8 whitespace-nowrap">
+                            <div className="absolute z-10 hidden px-2 py-1 text-xs transform -translate-x-1/2 rounded text-onPrimary dark:text-onPrimary-dark bg-primary dark:bg-primary-dark group-hover:block left-1/2 -top-8 whitespace-nowrap">
                               {tooltipText}
                             </div>
                           </td>
