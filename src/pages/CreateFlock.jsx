@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Button from "../components/Button/Button";
-import Dropdown from "../components/Dropdown/Dropdown";
 import { useLocation, useNavigate } from "react-router-dom";
 import Typography from "../components/Typography/Typography";
 
@@ -33,22 +32,31 @@ const CreateFlock = () => {
     };
   }, []);
 
-  const generateTimesThatWork = (dates, startTime, endTime, hourAvailability) => {
+  const generateTimesThatWork = (
+    dates,
+    startTime,
+    endTime,
+    hourAvailability
+  ) => {
     const result = [];
     if (!dates.length) return result;
-    dates.forEach(dateStr => {
+    dates.forEach((dateStr) => {
       if (hourAvailability) {
         // 24 hour: 0 to 23
         for (let hour = 0; hour < 24; hour++) {
-          const iso = new Date(`${dateStr}T${hour.toString().padStart(2, '0')}:00:00Z`).toISOString();
+          const iso = new Date(
+            `${dateStr}T${hour.toString().padStart(2, "0")}:00:00Z`
+          ).toISOString();
           result.push(iso);
         }
       } else if (startTime && endTime) {
         // e.g. startTime = '00:00', endTime = '03:00' for 12am-3am
-        const startHour = parseInt(startTime.split(':')[0], 10);
-        const endHour = parseInt(endTime.split(':')[0], 10);
+        const startHour = parseInt(startTime.split(":")[0], 10);
+        const endHour = parseInt(endTime.split(":")[0], 10);
         for (let hour = startHour; hour < endHour; hour++) {
-          const iso = new Date(`${dateStr}T${hour.toString().padStart(2, '0')}:00:00Z`).toISOString();
+          const iso = new Date(
+            `${dateStr}T${hour.toString().padStart(2, "0")}:00:00Z`
+          ).toISOString();
           result.push(iso);
         }
       }
@@ -58,7 +66,12 @@ const CreateFlock = () => {
 
   const handleSubmitFlockName = (e) => {
     e.preventDefault();
-    const timesThatWork = generateTimesThatWork(selectedDates, startTime, endTime, hourAvailability);
+    const timesThatWork = generateTimesThatWork(
+      selectedDates,
+      startTime,
+      endTime,
+      hourAvailability
+    );
     console.log({
       flockName,
       flockDescription,
@@ -89,9 +102,9 @@ const CreateFlock = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto min-h-screen flex flex-col gap-6 px-6 text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
+    <div className="flex flex-col w-full max-w-5xl min-h-screen gap-6 px-6 mx-auto text-black pb-28 pt-28 bg-surface dark:bg-surface-dark dark:text-white">
       {showAIBanner && (
-        <div className="w-full p-4 bg-primary-light bg-opacity-10 rounded-xl flex flex-col gap-2 mb-4">
+        <div className="flex flex-col w-full gap-2 p-4 mb-4 bg-primary-light bg-opacity-10 rounded-xl">
           <Typography textStyle="heading-md" color="primary-light">
             AI-Generated Event
           </Typography>
@@ -109,8 +122,8 @@ const CreateFlock = () => {
         </div>
       )}
 
-      <div className="flex justify-evenly space-x-16">
-        <form onSubmit={handleSubmitFlockName} className="space-y-4 w-1/2">
+      <div className="flex space-x-16 justify-evenly">
+        <form onSubmit={handleSubmitFlockName} className="w-1/2 space-y-4">
           {/* Flock Name */}
           <div className="flex flex-col gap-3">
             <label className="font-sans title-sm">Flock Name:</label>
@@ -123,12 +136,12 @@ const CreateFlock = () => {
             />
 
             {/* Flock Description */}
-            <label className="font-sans title-sm mt-4">Description:</label>
+            <label className="mt-4 font-sans title-sm">Description:</label>
             <textarea
               placeholder="Describe your event"
               value={flockDescription}
               onChange={(e) => setFlockDescription(e.target.value)}
-              className="p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark h-24"
+              className="h-24 p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
             />
 
             {/* Allow Anonymous Attendees */}
@@ -138,7 +151,7 @@ const CreateFlock = () => {
                   type="checkbox"
                   checked={allowAnonymous}
                   onChange={() => setAllowAnonymous(!allowAnonymous)}
-                  className="p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark w-5 h-5"
+                  className="w-5 h-5 p-2 font-sans border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
                 />
                 Allow anonymous attendees
               </label>
@@ -153,7 +166,7 @@ const CreateFlock = () => {
                 {selectedDates.map((date, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center p-2 border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
+                    className="flex items-center justify-between p-2 border rounded-md bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
                   >
                     <span>{formatDate(date)}</span>
                     <button
@@ -190,7 +203,7 @@ const CreateFlock = () => {
         <div className="w-1/2">
           <form className="w-full">
             {/* Times that Work */}
-            <div className="w-full flex flex-col w-full gap-3">
+            <div className="flex flex-col w-full gap-3">
               <label className="font-sans title-sm">Times that work:</label>
               <div className="flex gap-3">
                 <select
@@ -241,7 +254,7 @@ const CreateFlock = () => {
                     type="checkbox"
                     checked={hourAvailability}
                     onChange={() => setHourAvailability(!hourAvailability)}
-                    className="p-2 font-sans border:rounded-full bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark w-5 h-5"
+                    className="w-5 h-5 p-2 font-sans border:rounded-full bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark"
                   />
                   24 Hour Availability
                 </label>

@@ -17,7 +17,7 @@ import {
 } from "../components/Chatbot/utils/eventUtils";
 import bgBlob from "../assets/images/background-image.png"; // make sure this path is correct
 import EventSummaryCard from "../components/EventSummaryCard";
-import { formatDateDisplay } from '../utils/dateUtils';
+import { formatDateDisplay } from "../utils/dateUtils";
 
 function Home() {
   // Initialize chat state with the useChatState hook
@@ -79,9 +79,11 @@ function Home() {
   }, [messages, hasAskedQuestion]);
 
   // Scroll to bottom on new message
-  React.useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, messagesEndRef]);
 
   // Handle sending a message to AI
   const handleSend = async () => {
@@ -174,7 +176,9 @@ function Home() {
       eventInfo.dateRange.start &&
       eventInfo.dateRange.end
     ) {
-      return `${formatDateDisplay(eventInfo.dateRange.start)} - ${formatDateDisplay(eventInfo.dateRange.end)}`;
+      return `${formatDateDisplay(
+        eventInfo.dateRange.start
+      )} - ${formatDateDisplay(eventInfo.dateRange.end)}`;
     }
     return eventInfo.dateRange;
   };
@@ -262,9 +266,11 @@ function Home() {
                   <div
                     key={msg.id}
                     className={`max-w-[70%] min-w-[50px] px-3 py-3 rounded-[20px] whitespace-pre-line text-base font-medium
-                      ${msg.sender === "user"
-                        ? "self-end bg-surfaceContainer border border-border dark:border-border-dark dark:bg-surfaceContainer-dark text-onSurface dark:text-onSurface-dark"
-                        : "self-start  text-onSurface"}
+                      ${
+                        msg.sender === "user"
+                          ? "self-end bg-surfaceContainer border border-border dark:border-border-dark dark:bg-surfaceContainer-dark text-onSurface dark:text-onSurface-dark"
+                          : "self-start  text-onSurface"
+                      }
                     `}
                   >
                     {msg.text}
@@ -275,18 +281,23 @@ function Home() {
               {/* Confirmation card and button */}
               {showCard && (
                 <div className="flex flex-col items-start w-full my-4">
-                  <EventSummaryCard eventInfo={eventInfo} onCreate={handleCreateEvent} />
+                  <EventSummaryCard
+                    eventInfo={eventInfo}
+                    onCreate={handleCreateEvent}
+                  />
                 </div>
               )}
               {joinEventMessage && (
                 <div className="flex flex-col items-start w-full my-4">
-                  <div className="bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-xl p-4 border border-border dark:border-border-dark shadow">
-                    <div className="mb-2 font-semibold text-lg text-onSurface dark:text-onSurface-dark">
+                  <div className="p-4 border shadow bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-xl border-border dark:border-border-dark">
+                    <div className="mb-2 text-lg font-semibold text-onSurface dark:text-onSurface-dark">
                       {joinEventMessage.text}
                     </div>
                     <button
-                      onClick={() => window.location.href = `/event/${joinEventMessage.eventId}`}
-                      className="px-6 py-2 bg-primary text-white rounded-xl shadow font-bold hover:bg-primary-dark transition"
+                      onClick={() =>
+                        (window.location.href = `/event/${joinEventMessage.eventId}`)
+                      }
+                      className="px-6 py-2 font-bold text-white transition shadow bg-primary rounded-xl hover:bg-primary-dark"
                     >
                       Join Event
                     </button>

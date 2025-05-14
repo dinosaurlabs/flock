@@ -20,21 +20,7 @@ import { REQUIRED_INFO } from "./utils/eventUtils";
  * Main Chatbot component that manages the entire chat interface
  */
 function Chatbot() {
-  const navigate = useNavigate();
-
-  // Initialize chat state with the custom hook
-  const chatState = useChatState();
-  const {
-    messages,
-    input,
-    isLoading,
-    eventInfo,
-    messagesEndRef,
-    setInput,
-    setEventInfo,
-    addUserMessage,
-    setLoadingState,
-  } = chatState;
+  const { messages, eventInfo, setLoadingState } = useChatState();
 
   /**
    * Handle sending a message
