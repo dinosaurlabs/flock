@@ -335,7 +335,7 @@ const EventPage = () => {
     <div className="relative flex flex-col min-h-screen overflow-hidden bg-surface dark:bg-surface-dark">
       <div style={blobStyle} aria-hidden="true" />
       <div className="absolute inset-0 z-10 flex items-center justify-center min-h-screen select-none">
-        <div className="flex flex-col w-full max-w-3xl gap-6 p-8 border shadow-lg bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-2xl border-border dark:border-border-dark"
+        <div className="flex flex-col w-full max-w-3xl gap-6 p-8 border shadow-lg bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-2xl border-border dark:border-border-dark">
           <div className="flex items-center justify-between mb-2">
             <Typography textStyle="display-md" color="primary-light">
               Join {event.name || "Event"}
@@ -351,7 +351,10 @@ const EventPage = () => {
               } text-onPrimary dark:text-onPrimary-dark transition-colors duration-200`}
             />
           </div>
-          <Typography textStyle="body-lg" className="mb-2 text-onSurface dark:text-onSurface-dark">
+          <Typography
+            textStyle="body-lg"
+            className="mb-2 text-onSurface dark:text-onSurface-dark"
+          >
             {event.date_range && event.date_range.start && event.date_range.end
               ? `${formatDateShort(event.date_range.start)} - ${formatDateShort(
                   event.date_range.end
@@ -360,7 +363,9 @@ const EventPage = () => {
           </Typography>
           <div className="mb-2">
             <div className="flex items-center justify-between">
-              <label className="block mb-1 font-semibold text-onSurface dark:text-onSurface-dark">Name:</label>
+              <label className="block mb-1 font-semibold text-onSurface dark:text-onSurface-dark">
+                Name:
+              </label>
               {submitted && null}
             </div>
             <input
