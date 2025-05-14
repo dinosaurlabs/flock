@@ -6,40 +6,6 @@ import { supabase } from "../supabaseClient";
 import { parseDateUTC, formatDateShort } from "../utils/dateUtils";
 import bgBlob from "../assets/images/background-image.png";
 
-function getDatesInRange(start, end) {
-  // Handle undefined or null start/end dates
-  if (!start || !end) {
-    const today = new Date().toISOString().split("T")[0];
-    start = start || today;
-    end = end || today;
-    console.warn("Missing start or end date, using defaults:", { start, end });
-  }
-
-  const dates = [];
-  let current = parseDateUTC(start);
-  let last = parseDateUTC(end);
-
-  // Handle invalid date parsing
-  if (isNaN(current.getTime()) || isNaN(last.getTime())) {
-    console.error("Invalid date format:", { start, end });
-    // Return a single day (today) for invalid dates
-    const today = new Date();
-    return [today];
-  }
-
-  // Ensure end date is not before start date
-  if (last < current) {
-    console.warn("End date is before start date, swapping dates");
-    [current, last] = [last, current];
-  }
-
-  while (current <= last) {
-    dates.push(new Date(current));
-    current.setUTCDate(current.getUTCDate() + 1);
-  }
-  return dates;
-}
-
 function getAccessCode(id) {
   // Simple deterministic code for demo
   return id.slice(0, 6).toUpperCase();
@@ -264,7 +230,7 @@ const EventPage = () => {
 
   // Group times by date
   const timesByDate = (eventTimes || []).reduce((acc, iso) => {
-    const [date, time] = iso.split("T");
+    const [date] = iso.split("T");
     if (!acc[date]) acc[date] = [];
     acc[date].push(iso);
     return acc;
@@ -279,12 +245,6 @@ const EventPage = () => {
     )
   ).sort();
 
-  // Selection and slot info use ISO string as key
-  const handleCellClick = (iso) => {
-    if (!iso) return;
-    setSelected((prev) => ({ ...prev, [iso]: !prev[iso] }));
-  };
-
   const handleSave = async () => {
     if (!name.trim()) return alert("Please enter your name.");
     const availability = Object.entries(selected)
@@ -292,7 +252,7 @@ const EventPage = () => {
       .map(([k]) => k);
 
     // Check if a response from this user already exists
-    const { data: existing, error: fetchError } = await supabase
+    const { data: existing } = await supabase
       .from("responses")
       .select("id")
       .eq("event_id", id)

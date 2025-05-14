@@ -1,7 +1,5 @@
 // src/pages/Home.jsx
 import React, { useRef, useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
-import FlockLogo from "../components/SVGs/logos/FlockLogo";
 import { ArrowUpRight } from "lucide-react";
 import "../App.css";
 import "../components/Chatbot/Chatbot.css";
@@ -15,7 +13,7 @@ import {
   REQUIRED_INFO,
   hasRequiredInfo,
 } from "../components/Chatbot/utils/eventUtils";
-import bgBlob from "../assets/images/background-image.png"; // make sure this path is correct
+import bgBlob from "../assets/images/background-image.png";
 import EventSummaryCard from "../components/EventSummaryCard";
 import { formatDateDisplay } from "../utils/dateUtils";
 
@@ -25,14 +23,12 @@ function Home() {
   const {
     messages,
     input: inputText,
-    isLoading,
     eventInfo,
     messagesEndRef,
     setInput: setInputText,
     setEventInfo,
     addUserMessage,
     addBotMessage,
-    setLoadingState,
   } = chatState;
 
   // State to track if we should show the confirmation card

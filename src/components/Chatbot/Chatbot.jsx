@@ -24,7 +24,6 @@ function Chatbot() {
     messages,
     input,
     isLoading,
-    eventInfo,
     messagesEndRef,
     setInput,
     setEventInfo,
