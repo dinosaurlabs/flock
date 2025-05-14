@@ -20,7 +20,16 @@ import { REQUIRED_INFO } from "./utils/eventUtils";
  * Main Chatbot component that manages the entire chat interface
  */
 function Chatbot() {
-  const { messages, eventInfo, setLoadingState } = useChatState();
+  const {
+    messages,
+    input,
+    isLoading,
+    eventInfo,
+    messagesEndRef,
+    setInput,
+    setEventInfo,
+    addUserMessage,
+  } = useChatState();
 
   /**
    * Handle sending a message
@@ -33,10 +42,23 @@ function Chatbot() {
     setInput("");
 
     // Process the message with the chat controller
-    await processMessage(input, chatState, (eventId) => {
-      // Reset event info for potential new event after creating one
-      setEventInfo(REQUIRED_INFO);
-    });
+    await processMessage(
+      input,
+      {
+        messages,
+        input,
+        isLoading,
+        eventInfo,
+        messagesEndRef,
+        setInput,
+        setEventInfo,
+        addUserMessage,
+      },
+      (eventId) => {
+        // Reset event info for potential new event after creating one
+        setEventInfo(REQUIRED_INFO);
+      }
+    );
   };
 
   return (
