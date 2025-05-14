@@ -10,7 +10,7 @@ import Signup from "./pages/Signup.jsx";
 
 function App() {
   return (
-    <Router basename="/flock">
+    <Router>
       <main className="text-black bg-surface dark:bg-surface-dark dark:text-white">
         <NavBar />
         <Routes>
