@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import Typography from "../Typography/Typography";
 import "./Chatbot.css";
 
@@ -20,6 +19,7 @@ import { REQUIRED_INFO } from "./utils/eventUtils";
  * Main Chatbot component that manages the entire chat interface
  */
 function Chatbot() {
+  const chatState = useChatState();
   const {
     messages,
     input,
@@ -29,7 +29,7 @@ function Chatbot() {
     setInput,
     setEventInfo,
     addUserMessage,
-  } = useChatState();
+  } = chatState;
 
   /**
    * Handle sending a message
@@ -42,23 +42,10 @@ function Chatbot() {
     setInput("");
 
     // Process the message with the chat controller
-    await processMessage(
-      input,
-      {
-        messages,
-        input,
-        isLoading,
-        eventInfo,
-        messagesEndRef,
-        setInput,
-        setEventInfo,
-        addUserMessage,
-      },
-      (eventId) => {
-        // Reset event info for potential new event after creating one
-        setEventInfo(REQUIRED_INFO);
-      }
-    );
+    await processMessage(input, chatState, (eventId) => {
+      // Reset event info for potential new event after creating one
+      setEventInfo(REQUIRED_INFO);
+    });
   };
 
   return (
