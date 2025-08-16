@@ -158,7 +158,6 @@ function Home() {
     backgroundImage: `url(${bgBlob})`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center bottom",
-    opacity: 0.5,
     backgroundSize: "contain",
     pointerEvents: "none",
     userSelect: "none",
@@ -205,33 +204,32 @@ function Home() {
   }, [messages]);
 
   return (
-    <div className="flex overflow-hidden relative flex-col min-h-screen bg-surface dark:bg-surface-dark">
+    <div className="relative flex flex-col min-h-screen overflow-hidden bg-surface dark:bg-surface-dark">
       {/* ——— the blob behind everything ——— */}
       <div style={blobStyle} aria-hidden="true" />
 
       {/* ——— your hero content ——— */}
-      <main className="flex relative z-0 flex-col flex-1 justify-center items-center px-6 -mt-10">
-        <div className="flex flex-col gap-9 items-center transition-all duration-500 ease-in-out">
+      <main className="relative z-0 flex flex-col items-center justify-center flex-1 px-6 -mt-10">
+        <div className="flex flex-col items-center gap-9">
           {/* Show hero only if no user questions yet */}
           {!hasAskedQuestion ? (
-            <div className="animate-fade-in">
-              <div className="flex flex-col gap-2 items-center">
-                <div className="flex relative items-center space-x-8">
+            <>
+              <div className="flex flex-col items-center gap-2">
+                <div className="relative flex items-center space-x-8">
                   <PabloWave className="w-14 h-14 -rotate-12" />
-                  <h1 className="text-5xl font-semibold text-center text-black font-display dark:text-white">
+                  <h1 className="text-5xl font-medium text-center text-black font-display dark:text-white">
                     Events take flight on{" "}
                     <span className="font-bold text-primary">Flock</span>
                   </h1>
-                  <PabloWave className="w-14 h-14 transform rotate-12 -scale-x-100" />
+                  <PabloWave className="transform w-14 h-14 -scale-x-100 rotate-12" />
                 </div>
                 <p className="text-lg font-medium text-center text-secondary">
                   Create or join a flock without all the hassle.
                 </p>
               </div>
               {/* Original hero input box */}
-              <div className="mx-auto w-full max-w-2xl">
-                <div className="relative flex flex-col w-full gap-3 p-[1px] rounded-3xl bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 focus-within:from-blue-500 focus-within:via-blue-500 focus-within:to-blue-500 shadow-md focus-within:shadow-none transition-all duration-200">
-                  <div className="flex flex-col w-full gap-3 p-3 bg-white dark:bg-gray-900 rounded-[23px]">
+              <div className="w-full min-w-[350px]">
+                <div className="flex flex-col w-full min-w-[350px] gap-2 p-2 border bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark rounded-2xl focus-within:ring-1 focus-within:border-onSurface dark:focus-within:border-onSurface-dark">
                   <textarea
                     ref={textareaRef}
                     value={inputText || ""}
@@ -239,32 +237,31 @@ function Home() {
                     onKeyDown={handleKeyDown}
                     className="w-full overflow-y-auto custom-scrollbar bg-surfaceContainer dark:bg-surfaceContainer-dark p-2 text-onSurface resize-none focus:outline-none max-h-[150px]"
                     rows={3}
-                    placeholder="Describe your event (e.g., Team lunch next Friday 12-2pm)"
+                    placeholder="Describe the event you are trying to schedule or copy and paste your code!"
                   />
                   <div className="flex justify-end">
                     <button
                       onClick={handleSend}
-                      className={`p-2 rounded-full transition-colors ${
+                      className={`p-1 rounded-xl ${
                         inputText.trim()
-                          ? "bg-blue-500 hover:bg-blue-600 text-white"
-                          : "bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
+                          ? "bg-primary dark:bg-primary-dark text-onPrimary dark:text-onPrimary-dark"
+                          : "bg-border dark:bg-border-dark text-secondary"
                       }`}
                     >
-                      <ArrowUpRight size={20} />
+                      <ArrowUpRight size={24} />
                     </button>
-                  </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </>
           ) : (
             // Chat area replaces hero when user has asked a question
-            <div className="w-full max-w-xl min-w-[850px] mx-auto flex flex-col h-[70vh] relative animate-fade-in">
-              <div className="flex overflow-y-auto flex-col flex-1 gap-4 h-0 bg-transparent">
+            <div className="w-full max-w-xl min-w-[850px] mx-auto flex flex-col h-[70vh] relative">
+              <div className="flex flex-col flex-1 h-0 gap-4 overflow-y-auto bg-transparent">
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`max-w-[70%] min-w-[50px] px-4 py-3 rounded-3xl whitespace-pre-line text-base font-medium
+                    className={`max-w-[70%] min-w-[50px] px-3 py-3 rounded-[20px] whitespace-pre-line text-base font-medium
                       ${
                         msg.sender === "user"
                           ? "self-end bg-surfaceContainer border border-border dark:border-border-dark dark:bg-surfaceContainer-dark text-onSurface dark:text-onSurface-dark"
@@ -279,7 +276,7 @@ function Home() {
               </div>
               {/* Confirmation card and button */}
               {showCard && (
-                <div className="flex flex-col items-start my-4 w-full">
+                <div className="flex flex-col items-start w-full my-4">
                   <EventSummaryCard
                     eventInfo={eventInfo}
                     onCreate={handleCreateEvent}
@@ -287,8 +284,8 @@ function Home() {
                 </div>
               )}
               {joinEventMessage && (
-                <div className="flex flex-col items-start my-4 w-full">
-                  <div className="p-4 rounded-xl border shadow bg-surfaceContainer dark:bg-surfaceContainer-dark border-border dark:border-border-dark">
+                <div className="flex flex-col items-start w-full my-4">
+                  <div className="p-4 border shadow bg-surfaceContainer dark:bg-surfaceContainer-dark rounded-xl border-border dark:border-border-dark">
                     <div className="mb-2 text-lg font-semibold text-onSurface dark:text-onSurface-dark">
                       {joinEventMessage.text}
                     </div>
@@ -296,7 +293,7 @@ function Home() {
                       onClick={() =>
                         (window.location.href = `/event/${joinEventMessage.eventId}`)
                       }
-                      className="px-6 py-2 font-bold text-white rounded-xl shadow transition bg-primary hover:bg-primary-dark"
+                      className="px-6 py-2 font-bold text-white transition shadow bg-primary rounded-xl hover:bg-primary-dark"
                     >
                       Join Event
                     </button>
@@ -304,9 +301,7 @@ function Home() {
                 </div>
               )}
               {/* Chat input at the bottom */}
-              <div className="fixed z-20 w-full max-w-2xl -translate-x-1/2 bottom-8 left-1/2">
-                <div className="relative flex flex-col w-full gap-3 p-[1px] rounded-3xl bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 focus-within:from-blue-500 focus-within:via-blue-500 focus-within:to-blue-500 shadow-md focus-within:shadow-none transition-all duration-200">
-                  <div className="flex flex-col w-full gap-3 p-3 bg-white dark:bg-gray-900 rounded-[23px]">
+              <div className="fixed z-20 flex flex-col w-full gap-1 p-2 mt-2 -translate-x-1/2 border bg-surfaceContainer dark:bg-surfaceContainer-dark max-w-[40%] border-border dark:border-border-dark rounded-2xl focus-within:ring-1 focus-within:border-onSurface dark:focus-within:border-onSurface-dark bottom-8 left-1/2">
                 <textarea
                   ref={textareaRef}
                   value={inputText || ""}
@@ -327,8 +322,6 @@ function Home() {
                   >
                     <ArrowUpRight size={24} />
                   </button>
-                </div>
-                  </div>
                 </div>
               </div>
             </div>

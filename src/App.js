@@ -14,7 +14,7 @@ import { convex } from "./convexClient";
 function App() {
   // Check if we should use Convex or Supabase
   const useConvex = process.env.REACT_APP_USE_CONVEX === 'true';
-  
+
   return (
     <ConvexProvider client={convex}>
       <Router>

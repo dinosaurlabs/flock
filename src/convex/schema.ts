@@ -9,8 +9,10 @@ export default defineSchema({
       end: v.string(),
     }),
     times: v.optional(v.array(v.string())),
+    access_code: v.optional(v.string()),
     created_at: v.number(),
-  }),
+  })
+    .index("by_access_code", ["access_code"]),
   
   responses: defineTable({
     event_id: v.id("events"),

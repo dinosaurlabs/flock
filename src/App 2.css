@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.image-shadow {
+  @apply shadow-[0px_5px_86.1px_4px_rgba(0,141,222,0.2)];
+}
+
+.whole-page {
+  @apply mx-[6%] mt-[6%];
+}
+
+/* Custom scrollbar for textarea overflow */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d2d2d2;
+  border-radius: 10px;
+}
+
+/* Firefox scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #828282ff transparent;
+}

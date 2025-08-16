@@ -64,6 +64,7 @@ module.exports = {
     },
   },
   plugins: [
+    require("tailwindcss-animate"),
     plugin(function ({ addComponents, theme }) {
       addComponents({
         ".label-md": {
