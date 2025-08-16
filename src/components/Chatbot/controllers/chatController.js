@@ -1,7 +1,13 @@
-import { callOpenAI } from "../services/apiService";
-import { createEvent, findEventByAccessCode } from "../services/apiService";
-import { generateEventId, hasRequiredInfo } from "../utils/eventUtils";
+import { hasRequiredInfo } from "../utils/eventUtils";
 import { generateSystemPrompt } from "../prompts/systemPrompts";
+
+// Import based on environment variable
+const useConvex = process.env.REACT_APP_USE_CONVEX === 'true';
+const apiService = useConvex 
+  ? require("../services/apiServiceConvex")
+  : require("../services/apiService");
+
+const { callOpenAI, createEvent, findEventByAccessCode } = apiService;
 
 /**
  * Process the user's message and generate a response
@@ -213,10 +219,8 @@ export async function createEventFromInfo(
     return;
   }
 
-  const eventId = generateEventId();
-  // Map the fields to match Supabase schema
+  // Map the fields to match database schema
   const eventData = {
-    id: eventId,
     name: eventInfo.name,
     description: eventInfo.description || "No description provided",
     date_range: eventInfo.dateRange, // Mapping dateRange to date_range
@@ -229,9 +233,9 @@ export async function createEventFromInfo(
   console.log("Event data before API call:", eventData);
 
   try {
-    const { success, error } = await createEvent(eventData);
+    const { success, error, eventId } = await createEvent(eventData);
 
-    if (success) {
+    if (success && eventId) {
       const eventLink = `${window.location.origin}/event/${eventId}`;
       addBotMessage(
         `Perfect! I've created your event "${eventData.name}". Here's your event link:\n\n${eventLink}\n\nClick the button below to open the event page, or copy the link to share with participants.`,
@@ -246,7 +250,7 @@ export async function createEventFromInfo(
       // Return the eventId for any promise handlers
       return { success: true, eventId };
     } else {
-      throw error;
+      throw error || new Error("Failed to create event");
     }
   } catch (error) {
     console.error("Error creating event:", error);
@@ -279,15 +283,41 @@ function generateTimesArray(dateRange, timeRange) {
   }
   const [startHour, endHour] = parts;
   const startH = parseHourString(startHour);
-  const endH = parseHourString(endHour);
+  let endH = parseHourString(endHour);
+  
+  // Handle events that span midnight (e.g., 10 PM to 2 AM)
+  // If end hour is less than start hour, it means it goes to the next day
+  const spansMiddnight = endH <= startH;
+  if (spansMiddnight && endH === 0) {
+    endH = 24; // Treat "12 AM" as end of day when it spans midnight
+  }
+  
   const result = [];
   let current = new Date(dateRange.start);
   const last = new Date(dateRange.end);
+  
   while (current <= last) {
-    for (let hour = startH; hour < endH; hour++) {
-      // Store as local ISO string (no Z, no UTC conversion)
-      const iso = `${current.getFullYear()}-${pad(current.getMonth() + 1)}-${pad(current.getDate())}T${pad(hour)}:00:00`;
-      result.push(iso);
+    if (spansMiddnight) {
+      // Add hours from start to midnight
+      for (let hour = startH; hour < 24; hour++) {
+        const iso = `${current.getFullYear()}-${pad(current.getMonth() + 1)}-${pad(current.getDate())}T${pad(hour)}:00:00`;
+        result.push(iso);
+      }
+      // If we're not on the last day, add hours from midnight to end on next day
+      const nextDay = new Date(current);
+      nextDay.setDate(nextDay.getDate() + 1);
+      if (nextDay <= last) {
+        for (let hour = 0; hour < endH; hour++) {
+          const iso = `${nextDay.getFullYear()}-${pad(nextDay.getMonth() + 1)}-${pad(nextDay.getDate())}T${pad(hour)}:00:00`;
+          result.push(iso);
+        }
+      }
+    } else {
+      // Normal case: hours within the same day
+      for (let hour = startH; hour < endH; hour++) {
+        const iso = `${current.getFullYear()}-${pad(current.getMonth() + 1)}-${pad(current.getDate())}T${pad(hour)}:00:00`;
+        result.push(iso);
+      }
     }
     current.setDate(current.getDate() + 1);
   }
